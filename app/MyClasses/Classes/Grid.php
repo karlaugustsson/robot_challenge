@@ -3,7 +3,7 @@ use App\MyClasses\Exceptions\GridException as GridException;
 
 class Grid{
 	private $_height,$_width;
-
+	private $_objects_on_the_grid = array();
 	public function __construct($height,$width){
 
 
@@ -46,8 +46,32 @@ class Grid{
 	public function gridPositionExists($x,$y){
 		if($x <= $this->_width && $y <= $this->_height && $x >= 1 && $y >= 1){
 			return true;
-		}
+	}
 		return false;
 	
+	}
+
+	public function placeObjectOnGrid($object , $position ){
+		
+		if ( !is_array( $position) ){
+			throw new GridException("argument two is expected to be an array", 1);
+			return false;
+			
+		}
+		if( !$position[0] || !$position[1] ){
+			throw new GridException("position-array should have two keys for x and y position");
+			return false;
+		}
+
+		if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
+			throw new GridException("the position requested does not exist on this grid");
+			return false;
+		}
+
+		array_push( $this->_objects_on_the_grid , $object );
+
+		return true;
+
+
 	}
 }

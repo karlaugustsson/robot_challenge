@@ -2,7 +2,7 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\MyClasses\Classes\Grid as Grid;
-
+use App\MyClasses\Classes\Robot as Robot;
 
 class GridTest extends TestCase
 {	
@@ -55,5 +55,24 @@ class GridTest extends TestCase
 
     	$this->assertEquals(false,$grid->GridPositionExists("cow","mau"));
     	
+    }
+    /**
+     * Test failing grid
+     *
+     * @expectedException Exception
+     */
+
+    public function testAddingRobotsToGrid(){
+    	
+    	$robot = new Robot();
+
+    	$grid = new Grid(50,50);
+
+		$this->assertEquals(true,$grid->placeObjectOnGrid($robot,array(2,2)));
+
+		//throws error postion not found
+		$this->assertEquals(false,$grid->placeObjectOnGrid($robot,array(-60,2)));
+
+
     }
 }
