@@ -1,12 +1,14 @@
 <?php namespace App\MyClasses\Classes;
 
-use App\MyClasses\Classes\GridObject as GridObject;
+use App\MyClasses\Classes\MoveableObject as MoveableObject;
 
-class Robot extends GridObject{
+use App\MyClasses\Classes\Grid as Grid;
 
-	public function __construct(){
+class Robot extends MoveableObject{
 
-		parent::__construct("Robot");
+	public function __construct($facingDirection , Grid $gridObj){
+
+		parent::__construct($facingDirection,"Robot" , $gridObj);
 
 	}
 

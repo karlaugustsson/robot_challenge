@@ -66,45 +66,45 @@ class GridTest extends TestCase
 
     public function testAddingRobotsToGrid(){
     	
-    	$robot = new Robot();
+    	
 
     	$grid = new Grid(50,50);
 
-		$this->assertEquals(true,$grid->placeObjectOnGrid($robot,array(2,2)));
+    	$robot = new Robot("north",$grid);
+
+		$this->assertEquals(true,$robot->setInitialGridPosition(array(2,2)));
 
 		//alse throws error position not found
-		$this->assertEquals(false,$grid->placeObjectOnGrid($robot,array(-60,2)));
+		$this->assertEquals(true,$robot->setInitialGridPosition(array(-60,2)));
 
 
     }
 
     public function testRobotIsBlockingGridPosition(){
     	
-    	$robot = new Robot();
-
     	$grid = new Grid(50,50);
+    	$robot = new Robot("north",$grid);
 
-		$this->assertEquals(true,$grid->placeObjectOnGrid($robot,array(2,2)));
+    	
+
+		$this->assertEquals(true,$robot->setInitialGridPosition(array(2,2)));
 
 		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
 
-		$this->assertEquals(false,$grid->gridPositionIsBlocked(array("40",2)));
-		//alse throws error position not found
-		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(-60,2)));
 
     }
 
     public function testPlaceObstacleOnGrid(){
-    	$obstacle = new Obstacle();
+
+    	
 
     	$grid = new Grid(50,50);
 
-		$this->assertEquals(true,$grid->placeObjectOnGrid($obstacle,array(2,2)));
+    	$obstacle = new Obstacle($grid);
 
-		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
+		$this->assertEquals(true,$obstacle->setInitialGridPosition(array(2,2)));
 
-		$this->assertEquals(false,$grid->gridPositionIsBlocked(array("40",2)));
-		//alse throws error position not found
-		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(-60,2)));
+		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(60,40)));
+
     }
 }

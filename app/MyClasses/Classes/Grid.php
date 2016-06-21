@@ -61,8 +61,11 @@ class Grid{
 				throw new GridException("the position requested does not exist on this grid");
 				return false;
 			}
-			
-			$object->setGridPosition($position);
+
+			if ( $this->gridPositionIsBlocked($position) ){
+				throw new GridException("cant place object on position (" . $position[0].",". $position[1] .") that position has been taken");
+				return false;
+			}
 
 			return array_push( $this->_objects_on_the_grid , $object );
 		}
@@ -86,10 +89,12 @@ class Grid{
 
 		return true;
 	}
-
+	public function changePositionOfObject(Moveable $object){
+		// todo
+	}
 	public function gridPositionIsBlocked($position){
 
-		if($this->PositionArrayIsValid($position)){
+		
 			
 			if($this->gridPositionExists($position[0],$position[1])){
 				
@@ -102,7 +107,7 @@ class Grid{
 			}
 			
 			return false;
-		}
+		
 
 		return false;
 
