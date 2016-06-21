@@ -70,9 +70,25 @@ class GridTest extends TestCase
 
 		$this->assertEquals(true,$grid->placeObjectOnGrid($robot,array(2,2)));
 
-		//throws error postion not found
+		//alse throws error position not found
 		$this->assertEquals(false,$grid->placeObjectOnGrid($robot,array(-60,2)));
 
+
+    }
+
+    public function testRobotIsBlockingPosition(){
+    	
+    	$robot = new Robot();
+
+    	$grid = new Grid(50,50);
+
+		$this->assertEquals(true,$grid->placeObjectOnGrid($robot,array(2,2)));
+
+		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
+
+		$this->assertEquals(false,$grid->gridPositionIsBlocked(array("40",2)));
+		//alse throws error position not found
+		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(-60,2)));
 
     }
 }

@@ -2,6 +2,11 @@
 
 class Robot{
 	private $_grid;
+
+	private $_x_position = null;
+
+	private $_y_position = null;
+
 	public function constructor(){
 
 	}
@@ -9,6 +14,7 @@ class Robot{
 	public function setGrid($grid){
 		$this->_grid = $grid;
 	}
+
 	public function getGrid(){
 		try {
 			if($this->_grid){
@@ -19,5 +25,18 @@ class Robot{
 		} catch (Exception $e) {
 			return $e->getMessage();
 		}
+	}
+
+	public function setGridPosition($position){
+
+		$this->_x_position = $position[0];
+		$this->_y_position = $position[1];
+	}
+
+	public function getGridPosition(){
+		if ( !$this->_x_position ){
+			return false;
+		}
+		return array($this->_x_position , $this->_y_position);
 	}
 }

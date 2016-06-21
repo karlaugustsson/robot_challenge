@@ -53,8 +53,29 @@ class Grid{
 
 	public function placeObjectOnGrid($object , $position ){
 		
+
+
+		if($this->PositionArrayIsValid($position)){
+			
+			if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
+				throw new GridException("the position requested does not exist on this grid");
+				return false;
+			}
+			
+			$object->setGridPosition($position);
+
+			return array_push( $this->_objects_on_the_grid , $object );
+		}
+
+		return false;
+
+
+	}
+
+	private function PositionArrayIsValid($position){
+		
 		if ( !is_array( $position) ){
-			throw new GridException("argument two is expected to be an array", 1);
+			throw new GridException("argument position is expected to be an array", 1);
 			return false;
 			
 		}
@@ -63,14 +84,27 @@ class Grid{
 			return false;
 		}
 
-		if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
-			throw new GridException("the position requested does not exist on this grid");
+		return true;
+	}
+
+	public function gridPositionIsBlocked($position){
+
+		if($this->PositionArrayIsValid($position)){
+			
+			if($this->gridPositionExists($position[0],$position[1])){
+				
+				foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+					
+					if($grid_obj->getGridPosition() === $position ){
+						return true;
+					}
+				}
+			}
+			
 			return false;
 		}
 
-		array_push( $this->_objects_on_the_grid , $object );
-
-		return true;
+		return false;
 
 
 	}
