@@ -8,8 +8,10 @@ class GridObject{
 
 	protected $_y_position = null;
 
-	public function constructor(){
+	protected $_type;
 
+	public function __construct($TypeString){
+		$this->_type = $TypeString ; 
 	}
 
 	public function setGrid($grid){
@@ -32,6 +34,10 @@ class GridObject{
 
 		$this->_x_position = $position[0];
 		$this->_y_position = $position[1];
+	}
+
+	public function getTypeOfGridObject(){
+		return $this->_type;
 	}
 
 	public function getGridPosition(){

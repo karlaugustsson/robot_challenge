@@ -4,6 +4,8 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use App\MyClasses\Classes\Grid as Grid;
 use App\MyClasses\Classes\Robot as Robot;
 
+use App\MyClasses\Classes\Obstacle as Obstacle;
+
 class GridTest extends TestCase
 {	
 	private $_grid;
@@ -90,5 +92,19 @@ class GridTest extends TestCase
 		//alse throws error position not found
 		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(-60,2)));
 
+    }
+
+    public function testPlaceObstacleOnGrid(){
+    	$obstacle = new Obstacle();
+
+    	$grid = new Grid(50,50);
+
+		$this->assertEquals(true,$grid->placeObjectOnGrid($obstacle,array(2,2)));
+
+		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
+
+		$this->assertEquals(false,$grid->gridPositionIsBlocked(array("40",2)));
+		//alse throws error position not found
+		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(-60,2)));
     }
 }
