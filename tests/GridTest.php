@@ -12,7 +12,7 @@ class GridTest extends TestCase
      *
      * @return void
      */
-    public function testgetGridDimensionsValues()
+    public function testGetGridDimensionsValues()
     {
     	// test valid grid dimennions
     		$grid = new Grid(1,1);
@@ -34,8 +34,26 @@ class GridTest extends TestCase
      *
      * @expectedException Exception
      */
-    public function testFailingGrids(){
+    public function testInstanciatingFailingGrids(){
 
     	$grid = new Grid("maju","cow");
+    }
+    /**
+     * Test failing grid
+     *
+     * @return void
+     */
+    public function testGridPositionExist(){
+
+    	$grid = new Grid(50,50);
+
+    	$this->assertEquals(true,$grid->GridPositionExists(20,30));
+
+    	$this->assertEquals(false,$grid->GridPositionExists(-20,-30));
+
+    	$this->assertEquals(false,$grid->GridPositionExists(51,50));
+
+    	$this->assertEquals(false,$grid->GridPositionExists("cow","mau"));
+    	
     }
 }

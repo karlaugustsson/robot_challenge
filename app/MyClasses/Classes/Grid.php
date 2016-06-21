@@ -7,14 +7,14 @@ class Grid{
 	public function __construct($height,$width){
 
 
-			if( (int)$height == 0 ){
+		if( (int)$height == 0 ){
 			
-				throw new GridException("Grid height must be heiger than 0");	
-			}
+			throw new GridException("Grid height must be heiger than 0");	
+		}
 
-			if ( (int)$width == 0 ){
-				throw new GridException("Grid Width Must be wider than 0");	
-			}
+		if ( (int)$width == 0 ){
+			throw new GridException("Grid Width Must be wider than 0");	
+		}
 
 
 		$this->_height = (int)$height;
@@ -41,5 +41,13 @@ class Grid{
 
 	public function getGridWidth(){
 		return $this->_width;
+	}
+
+	public function gridPositionExists($x,$y){
+		if($x <= $this->_width && $y <= $this->_height && $x >= 1 && $y >= 1){
+			return true;
+		}
+		return false;
+	
 	}
 }
