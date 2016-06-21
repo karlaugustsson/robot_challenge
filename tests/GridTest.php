@@ -76,7 +76,7 @@ class GridTest extends TestCase
 
     }
 
-    public function testRobotIsBlockingPosition(){
+    public function testRobotIsBlockingGridPosition(){
     	
     	$robot = new Robot();
 

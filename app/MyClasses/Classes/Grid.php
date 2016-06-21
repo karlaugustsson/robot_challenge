@@ -51,7 +51,7 @@ class Grid{
 	
 	}
 
-	public function placeObjectOnGrid($object , $position ){
+	public function placeObjectOnGrid(GridObject $object , $position ){
 		
 
 
