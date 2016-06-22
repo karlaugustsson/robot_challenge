@@ -1,6 +1,6 @@
 <?php namespace App\MyClasses\Classes;
 use App\MyClasses\Exceptions\GridException as GridException;
-
+use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 class Grid{
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
@@ -51,7 +51,7 @@ class Grid{
 	
 	}
 
-	public function placeObjectOnGrid(GridObject $object , $position ){
+	public function placeObjectOnGrid(GridObjectInterface $object , $position ){
 		
 
 
@@ -100,7 +100,7 @@ class Grid{
 				
 				foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
-					if($grid_obj->getGridPosition() === $position ){
+					if($grid_obj->getGridPosition() === $position && $grid_obj->IsBlockable()){
 						return true;
 					}
 				}

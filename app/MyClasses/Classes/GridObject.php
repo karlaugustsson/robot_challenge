@@ -36,10 +36,9 @@ class GridObject{
 			$this->_y_position = $position[1];
 			return true;
 
-		}else{
-			return false;
 		}
-
+		
+		return false;
 
 	}
 

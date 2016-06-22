@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+
 use App\MyClasses\Classes\Grid as Grid;
 use App\MyClasses\Classes\Robot as Robot;
 
@@ -80,6 +81,7 @@ class GridTest extends TestCase
 
     }
 
+
     public function testRobotIsBlockingGridPosition(){
     	
     	$grid = new Grid(50,50);
@@ -96,7 +98,6 @@ class GridTest extends TestCase
 
     public function testPlaceObstacleOnGrid(){
 
-    	
 
     	$grid = new Grid(50,50);
 
@@ -104,7 +105,32 @@ class GridTest extends TestCase
 
 		$this->assertEquals(true,$obstacle->setInitialGridPosition(array(2,2)));
 
-		$this->assertEquals(false,$grid->gridPositionIsBlocked(array(60,40)));
+		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
 
+    }
+    public function testValidWalkCommands(){
+        $grid = new Grid(50,50);
+        $robot = new Robot("North",$grid);
+
+        
+
+        $this->assertEquals(true,$robot->executeWalkCommand("FFlff"));
+         $this->assertEquals(true,$robot->executeWalkCommand(array("f","l","r","f","b")));
+       
+    }
+    /**
+     * Test failing grid
+     *
+     * @expectedException Exception
+     */
+    public function testInValidWalkCommands(){
+        $grid = new Grid(50,50);
+        $robot = new Robot("North",$grid);
+
+        
+
+        $this->assertEquals(false,$robot->executeWalkCommand("cow"));
+         $this->assertEquals(false,$robot->executeWalkCommand(array("f","l","y","f","b")));
+       
     }
 }
