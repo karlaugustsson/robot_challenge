@@ -1,15 +1,16 @@
 <?php namespace App\MyClasses\Classes;
 use App\MyClasses\Exceptions\GridException as GridException;
+use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
 use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 class Grid{
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
-	public function __construct($height,$width){
+	public function __construct($width,$height){
 
 
 		if( (int)$height == 0 ){
 			
-			throw new GridException("Grid height must be heiger than 0");	
+			throw new GridException("Grid height must be heigher than 0");	
 		}
 
 		if ( (int)$width == 0 ){
@@ -32,7 +33,7 @@ class Grid{
 	}
 
 	public function getGridDimensions(){
-		return array($this->_height,$this->_width);
+		return array($this->_width,$this->_height);
 	}
 
 	public function getGridHeight(){
@@ -44,29 +45,37 @@ class Grid{
 	}
 
 	public function gridPositionExists($x,$y){
-		if($x <= $this->_width && $y <= $this->_height && $x >= 1 && $y >= 1){
+		if($x <= $this->_width && $y <= $this->_height && $x >= 0 && $y >= 0){
 			return true;
 	}
 		return false;
 	
 	}
 
-	public function placeObjectOnGrid(GridObjectInterface $object , $position ){
-		
-
+	public function canPlaceObjectOnPosition($position){
 
 		if($this->PositionArrayIsValid($position)){
 			
-			if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
-				throw new GridException("the position requested does not exist on this grid");
+		if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
+				throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
 				return false;
-			}
+		}
 
-			if ( $this->gridPositionIsBlocked($position) ){
-				throw new GridException("cant place object on position (" . $position[0].",". $position[1] .") that position has been taken");
+			
+		if ( $this->gridPositionIsBlocked($position) ){
+				throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid was blocked");
 				return false;
-			}
+		}
 
+			return true;
+		}
+		return false;	
+	}
+
+	public function placeObjectOnGrid(GridObjectInterface $object , $position ){
+		
+
+		if ($this->canPlaceObjectOnPosition($position)){
 			return array_push( $this->_objects_on_the_grid , $object );
 		}
 
@@ -82,7 +91,8 @@ class Grid{
 			return false;
 			
 		}
-		if( !$position[0] || !$position[1] ){
+		if( $position[0] === null || $position[1] === null ){
+			
 			throw new GridException("position-array should have two keys for x and y position");
 			return false;
 		}

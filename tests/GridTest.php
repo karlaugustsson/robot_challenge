@@ -56,7 +56,8 @@ class GridTest extends TestCase
 
     	$this->assertEquals(false,$grid->GridPositionExists(51,50));
 
-    	$this->assertEquals(false,$grid->GridPositionExists("cow","mau"));
+    	$this->assertEquals(true,$grid->GridPositionExists("cow","mau"));
+
     	
     }
     /**
@@ -85,6 +86,7 @@ class GridTest extends TestCase
     public function testRobotIsBlockingGridPosition(){
     	
     	$grid = new Grid(50,50);
+
     	$robot = new Robot("north",$grid);
 
     	
@@ -109,13 +111,19 @@ class GridTest extends TestCase
 
     }
     public function testValidWalkCommands(){
+        $grid = new Grid(100,100);
+        $robot = new Robot("South",$grid);
+
+        
+        $this->assertEquals(true,$robot->setInitialGridPosition(array(0,0)));
+        $this->assertEquals(array(2,2),$robot->executeWalkCommand("fflff"));
+
         $grid = new Grid(50,50);
         $robot = new Robot("North",$grid);
 
         
-
-        $this->assertEquals(true,$robot->executeWalkCommand("FFlff"));
-         $this->assertEquals(true,$robot->executeWalkCommand(array("f","l","r","f","b")));
+        $this->assertEquals(true,$robot->setInitialGridPosition(array(1,1)));
+        $this->assertEquals(array(1,0),$robot->executeWalkCommand(array("f","f","l","f","f")));
        
     }
     /**
@@ -133,4 +141,6 @@ class GridTest extends TestCase
          $this->assertEquals(false,$robot->executeWalkCommand(array("f","l","y","f","b")));
        
     }
+
+
 }
