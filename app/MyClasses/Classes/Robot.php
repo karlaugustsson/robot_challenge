@@ -65,10 +65,9 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 
 	}
 
-	public function tryNewPosition($direction){
+	public function tryNewPosition($new_position){
 		try {
 
-			$new_position = $this->determineNextGridPosition($direction);
 
 			$this->_grid_obj->canPlaceObjectOnPosition($new_position);
 			$this->_x_position = $new_position[0];
@@ -147,18 +146,18 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			
 			switch (strtolower($command)) {
 				case 'l':
-					$this->changeFacingDirection("l");
+					$this->changeDirectionLeft();
 					break;
 				case 'r':
-					$this->changeFacingDirection("r");
+					$this->changeDirectionRight();
 					break;
 				case 'f':
-					$this->tryNewPosition("f");
+					$this->tryNewPosition($this->moveForward());
 					
 				break;
 				
 				default:
-					$this->tryNewPosition("b");
+					$this->tryNewPosition($this->moveBackwards());
 				break;
 			}
 		}
@@ -167,94 +166,95 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 
 
 	}
-	public function changeFacingDirection($robotTurningDirection){
-		
-		if( !$this->validWalkCommand($robotTurningDirection) ){
-
-			return false;
-		}
-		switch ($this->_faceing_direction) {
-			case 'south':
-				if( $robotTurningDirection == "l" ){
-					
-					$this->_faceing_direction = "west";
-
-				}else{
-
-					$this->_faceing_direction = "east";
-				}
-			break;
-			
-			case 'north':
-				if( $robotTurningDirection == "l" ){
-					$this->_faceing_direction = "west";
-				}else{
-					$this->_faceing_direction = "east";
-				}
-			break;
+	public function changeDirectionLeft(){
+		switch ($this->getFacingDirection()) {
 
 			case 'west':
-				if ( $robotTurningDirection == "l" ){
-					$this->faceing_direction = "south";
-				}else{
-					$this->_faceing_direction = "north";
-				}
+				$this->setFacingdirection("south");
+			break;
+
+			case 'east':
+				$this->setFacingdirection("north");
 			break;
 
 			default:
-				if ( $robotTurningDirection == "l" ){
-					$this->_faceing_direction = "north";
-				}else{
-					$this->_faceing_direction = "south";
-				}
+				$this->setFacingdirection("west");
 			break;
 	}
-}
+	}
+	public function ChangeDirectionRight(){
 
-public function determineNextGridPosition($direction){
-		
-		if( !$this->validWalkCommand($direction) ){
-			return false;
-		}
-	
-		switch ($this->_faceing_direction) {
-			case 'south':
-				if($direction == "f"){
-					
+		switch ($this->getFacingDirection()) {
+
+			case 'west':
+				$this->setFacingdirection("north");
+			break;
 			
-					return array($this->_x_position , $this->_y_position + 1);
-				}else{
-					return array($this->_x_position , $this->_y_position - 1);
-				}
+			case 'east':
+				$this->setFacingdirection("south");
+			break;
+			default:
+				$this->setFacingdirection("east");
+			break;
+	}
+	}
+	public function moveForward(){
+		switch ($this->getFacingDirection()) {
+			case 'south':
+
+				return array($this->_x_position , $this->_y_position + 1);
+				
 			break;
 			
 			case 'north':
-				if($direction == "f"){
 	
 					return array($this->_x_position , $this->_y_position - 1);
-				}else{
-					return array($this->_x_position, $this->_y_position + 1);
-				}
+				
 			break;
 			case 'east':
-				if($direction == "f"){
-
 					return array($this->_x_position - 1 , $this->_y_position);
-				}else{
-					return array($this->_x_position + 1, $this->_y_position);
-				}
+
 			break;
 
 			default:
-				if($direction == "f"){
-			
-					return array($this->_x_position + 1 , $this->_y_position);
-				}else{
-					return array($this->_x_position - 1, $this->_y_position);
-				}
+
+				return array($this->_x_position + 1 , $this->_y_position);
 			break;
 		}
-}
+	}
+	public function moveBackwards(){
+		
+		switch ($this->getFacingDirection()) {
+			case 'south':
+
+				return array($this->_x_position , $this->_y_position - 1);
+
+			break;
+			
+			case 'north':
+
+				return array($this->_x_position, $this->_y_position + 1);
+				
+			break;
+			case 'east':
+
+				return array($this->_x_position + 1, $this->_y_position);	
+			break;
+
+			default:
+
+				return array($this->_x_position - 1, $this->_y_position);
+			
+			break;
+		}
+	}
+	public function getFacingDirection(){
+		return $this->_faceing_direction ; 
+	}
+	public function setFacingdirection($direction){
+		$this->_faceing_direction = $direction ; 
+	}
+
 	public function validFacingDirection($faceingDirection){
 
 		if ( in_array ( strtolower($faceingDirection) , $this->_allowed_facing_directions ) ){

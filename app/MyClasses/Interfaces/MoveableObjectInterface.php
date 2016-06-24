@@ -6,10 +6,15 @@ interface MoveableObjectInterface{
 	
 	public function validWalkCommand($Walkcommand);
 	public function validFacingDirection($faceingDirection);
-	
-	public function ChangeFacingDirection($turningDirection);
-	public function determineNextGridPosition($direction);
 	public function setCanMove($bool = null);
+	public function canMove();
+
+
+	public function moveForward();
+	public function changeDirectionLeft();
+	public function changeDirectionRight();
+	public function moveBackwards();
+
 
 
 }

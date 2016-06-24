@@ -138,7 +138,7 @@ class GridTest extends TestCase
         
 
         $this->assertEquals(false,$robot->executeWalkCommand("cow"));
-         $this->assertEquals(false,$robot->executeWalkCommand(array("f","l","y","f","b")));
+        $this->assertEquals(false,$robot->executeWalkCommand(array("f","l","y","f","b")));
        
     }
 
