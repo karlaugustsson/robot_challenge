@@ -4,9 +4,12 @@ use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 
 use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
+
 use App\MyClasses\Exceptions\MoveableException as MoveableException; 
 
 use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+
+use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
 
 
 class Robot Implements MoveableObjectInterface , GridObjectInterface {
@@ -78,8 +81,9 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 
 				$this->stop();
 				return $e->getMessage();
+
 			} catch( GridPositionOutOfBoundsException $e){
-			
+				
 				$this->stop();
 
 				return $this->getGridPosition();
@@ -91,7 +95,8 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	}
 
 	public function getGridPosition(){
-		if ( !$this->_x_position ){
+		if ( $this->_x_position === null || $this->_y_position === null  ){
+
 			return false;
 		}
 		return array($this->_x_position , $this->_y_position);
@@ -176,9 +181,12 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			case 'east':
 				$this->setFacingdirection("north");
 			break;
-
-			default:
+			case "north":
 				$this->setFacingdirection("west");
+			break;
+			default:
+				
+				$this->setFacingdirection("east");
 			break;
 	}
 	}
@@ -193,8 +201,11 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			case 'east':
 				$this->setFacingdirection("south");
 			break;
-			default:
+			case "north":
 				$this->setFacingdirection("east");
+			break;
+			default:
+				$this->setFacingdirection("west");
 			break;
 	}
 	}
@@ -207,18 +218,18 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			break;
 			
 			case 'north':
-	
+				
 					return array($this->_x_position , $this->_y_position - 1);
 				
 			break;
 			case 'east':
-					return array($this->_x_position - 1 , $this->_y_position);
+					return array($this->_x_position + 1 , $this->_y_position);
 
 			break;
 
 			default:
 
-				return array($this->_x_position + 1 , $this->_y_position);
+				return array($this->_x_position - 1 , $this->_y_position);
 			break;
 		}
 	}
@@ -238,12 +249,12 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			break;
 			case 'east':
 
-				return array($this->_x_position + 1, $this->_y_position);	
+				return array($this->_x_position - 1, $this->_y_position);	
 			break;
 
 			default:
 
-				return array($this->_x_position - 1, $this->_y_position);
+				return array($this->_x_position + 1, $this->_y_position);
 			
 			break;
 		}

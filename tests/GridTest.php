@@ -116,6 +116,7 @@ class GridTest extends TestCase
 
         
         $this->assertEquals(true,$robot->setInitialGridPosition(array(0,0)));
+    
         $this->assertEquals(array(2,2),$robot->executeWalkCommand("fflff"));
 
         $grid = new Grid(50,50);
@@ -126,6 +127,7 @@ class GridTest extends TestCase
         $this->assertEquals(array(1,0),$robot->executeWalkCommand(array("f","f","l","f","f")));
        
     }
+
     /**
      * Test failing grid
      *
@@ -139,6 +141,19 @@ class GridTest extends TestCase
 
         $this->assertEquals(false,$robot->executeWalkCommand("cow"));
         $this->assertEquals(false,$robot->executeWalkCommand(array("f","l","y","f","b")));
+       
+    }
+
+    public function testRobotWalkCommandsWithobstacle(){
+        $grid = new Grid(100,100);
+        $robot = new Robot("North",$grid);
+        $obstacle = new Obstacle($grid);
+       
+        $this->assertEquals(true,$obstacle->setInitialGridPosition(array(48,50)));
+     
+        $this->assertEquals(true,$robot->setInitialGridPosition(array(50,50)));
+        $this->assertEquals(array(48,49),$robot->executeWalkCommand("fflffrbb"));
+
        
     }
 

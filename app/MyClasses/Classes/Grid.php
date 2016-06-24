@@ -1,7 +1,9 @@
 <?php namespace App\MyClasses\Classes;
 use App\MyClasses\Exceptions\GridException as GridException;
 use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
 use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
+
 class Grid{
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
@@ -104,13 +106,14 @@ class Grid{
 	}
 	public function gridPositionIsBlocked($position){
 
-		
 			
+
 			if($this->gridPositionExists($position[0],$position[1])){
-				
+			
 				foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
 					if($grid_obj->getGridPosition() === $position && $grid_obj->IsBlockable()){
+
 						return true;
 					}
 				}
