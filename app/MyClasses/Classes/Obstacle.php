@@ -29,15 +29,18 @@ class Obstacle implements GridObjectInterface{
 	}
 
 	public function getGrid(){
+		
+		
+		if($this->_grid_obj === null){
+			throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
+			return false;
+		}
 		return $this->_grid_obj;
 	}
 
 	public function setInitialGridPosition( $position ){
 		
-		if($this->_grid_obj === null){
-			throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
-			
-		}
+
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 
 			$this->_x_position = $position[0];

@@ -3,7 +3,7 @@
 interface CanPlaceObjectsInWallInterface{
 
 
-	public function canPlaceObjectOnPosition($position , $object = null);
+	public function canPlaceObjectOnPosition($position ,GridObjectInterface $object = null);
 
 	public function gridPositionExistsIncludeWalls($x,$y);
 

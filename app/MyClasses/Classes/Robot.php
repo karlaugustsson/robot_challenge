@@ -80,12 +80,14 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 		try {
 
 
-			if( $this->_grid_obj->canPlaceObjectOnPosition($new_position) ){
+			if( $this->_grid_obj->canPlaceObjectOnPosition($new_position)){
+				
 				$warpPosition = $this->_grid_obj->getWarpPointPosition($new_position) ; 
+				
 				if( $warpPosition != false ){
 					$this->_x_position = $warpPosition[0];
 					$this->_y_position = $warpPosition[1];	
-					var_dump("hepp");
+				
 				}else{
 
 					$this->_x_position = $new_position[0];

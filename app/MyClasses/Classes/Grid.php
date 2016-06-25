@@ -2,10 +2,13 @@
 use App\MyClasses\Exceptions\GridException as GridException;
 use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
 use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+
 use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 use App\MyClasses\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
+use App\MyClasses\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
 use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
-class Grid implements CanPlaceObjectsInWallInterface {
+
+class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
 	public function __construct($width,$height){
@@ -39,32 +42,31 @@ class Grid implements CanPlaceObjectsInWallInterface {
 		return array($this->_width,$this->_height);
 	}
 
-	public function getGridHeight(){
+	private function getGridHeight(){
 		return $this->_height;
 	}
 
-	public function getGridWidth(){
+	private function getGridWidth(){
 		return $this->_width;
 	}
 
 	public function gridPositionExists($x,$y){
-		if($x <= $this->_width && $y <= $this->_height && $x >= 0 && $y >= 0  || $this->positionHasWarpPoint(array($x,$y)) == true){
+		if($x <= $this->getGridWidth() && $y <= $this->getGridHeight() && $x >= 0 && $y >= 0  || $this->positionHasWarpPoint(array($x,$y)) == true )
 			return true;
-		}
+		
 
 		return false;
 	
 	}
 	public function gridPositionExistsIncludeWalls($x,$y){
 		
-		if($x <= $this->_width + 1 && $y <= $this->_height + 1 && $x >= -1 && $y >= -1 ){
-
+		if($x <= $this->getGridWidth() + 1 && $y <= $this->getGridHeight() + 1 && $x >= -1 && $y >= -1 )
 			return true;
-	}
+		
 		return false;
 	
 	}
-	public function canPlaceObjectOnPosition($position , $object = null){
+	public function canPlaceObjectOnPosition($position , GridObjectInterface $object = null){
 
 		if($this->PositionArrayIsValid($position)){
 
@@ -94,13 +96,14 @@ class Grid implements CanPlaceObjectsInWallInterface {
 
 			return true;
 		}
+
 		return false;	
 	}
 	public function positionHasWarpPoint($position){
 
 		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
-		if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint){
+		if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint ){
 
 			return true;
 		}
@@ -112,7 +115,7 @@ class Grid implements CanPlaceObjectsInWallInterface {
 
 		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
-			if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint){
+			if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint ){
 
 				return $grid_obj->getWarpPointOutputPosition();
 			}
