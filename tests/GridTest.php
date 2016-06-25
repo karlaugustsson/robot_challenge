@@ -7,6 +7,9 @@ use App\MyClasses\Classes\Robot as Robot;
 
 use App\MyClasses\Classes\Obstacle as Obstacle;
 
+
+use App\MyClasses\Classes\WarpPoint as WarpPoint;
+
 class GridTest extends TestCase
 {	
 	private $_grid;
@@ -60,11 +63,7 @@ class GridTest extends TestCase
 
     	
     }
-    /**
-     * Test failing grid
-     *
-     * @expectedException Exception
-     */
+
 
     public function testAddingRobotsToGrid(){
     	
@@ -77,7 +76,7 @@ class GridTest extends TestCase
 		$this->assertEquals(true,$robot->setInitialGridPosition(array(2,2)));
 
 		//alse throws error position not found
-		$this->assertEquals(true,$robot->setInitialGridPosition(array(-60,2)));
+		$this->assertEquals(false,$robot->setInitialGridPosition(array(-60,2)));
 
 
     }
@@ -116,7 +115,7 @@ class GridTest extends TestCase
 
         
         $this->assertEquals(true,$robot->setInitialGridPosition(array(0,0)));
-    
+
         $this->assertEquals(array(2,2),$robot->executeWalkCommand("fflff"));
 
         $grid = new Grid(50,50);
@@ -144,7 +143,7 @@ class GridTest extends TestCase
        
     }
 
-    public function testRobotWalkCommandsWithobstacle(){
+    public function testRobotWalkCommandsWithObstacle(){
         $grid = new Grid(100,100);
         $robot = new Robot("North",$grid);
         $obstacle = new Obstacle($grid);
@@ -153,6 +152,17 @@ class GridTest extends TestCase
      
         $this->assertEquals(true,$robot->setInitialGridPosition(array(50,50)));
         $this->assertEquals(array(48,49),$robot->executeWalkCommand("fflffrbb"));
+
+       
+    }
+
+    public function testRobotWalkCommandsWithWarpPoint(){
+        $grid = new Grid(100,100);
+        $robot = new Robot("North",$grid);
+        $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
+     
+        $this->assertEquals(true,$robot->setInitialGridPosition(array(50,0)));
+        $this->assertEquals(array(52,99),$robot->executeWalkCommand("ffrff"));
 
        
     }

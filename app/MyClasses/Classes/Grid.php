@@ -3,8 +3,9 @@ use App\MyClasses\Exceptions\GridException as GridException;
 use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
 use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
 use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
-
-class Grid{
+use App\MyClasses\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
+use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
+class Grid implements CanPlaceObjectsInWallInterface {
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
 	public function __construct($width,$height){
@@ -47,25 +48,47 @@ class Grid{
 	}
 
 	public function gridPositionExists($x,$y){
-		if($x <= $this->_width && $y <= $this->_height && $x >= 0 && $y >= 0){
+		if($x <= $this->_width && $y <= $this->_height && $x >= 0 && $y >= 0  || $this->positionHasWarpPoint(array($x,$y)) == true){
+			return true;
+		}
+
+		return false;
+	
+	}
+	public function gridPositionExistsIncludeWalls($x,$y){
+		
+		if($x <= $this->_width + 1 && $y <= $this->_height + 1 && $x >= -1 && $y >= -1 ){
+
 			return true;
 	}
 		return false;
 	
 	}
-
-	public function canPlaceObjectOnPosition($position){
+	public function canPlaceObjectOnPosition($position , $object = null){
 
 		if($this->PositionArrayIsValid($position)){
-			
-		if ( !$this->gridPositionExists( $position[0], $position[1] ) ){
+
+		if ( $object && $object instanceof  WallObjectInterface ){
+
+			if( !$this->gridPositionExistsIncludeWalls( $position[0], $position[1] ) ){
+
 				throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
-				return false;
+				return false;	
+			}
+		}else{
+
+			if ( !$this->gridPositionExists( $position[0], $position[1] )  ){
+			
+					return false;
+			}
+
 		}
+			
+
 
 			
 		if ( $this->gridPositionIsBlocked($position) ){
-				throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid was blocked");
+				throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid has already been taken by an blockable object");
 				return false;
 		}
 
@@ -73,9 +96,39 @@ class Grid{
 		}
 		return false;	
 	}
+	public function positionHasWarpPoint($position){
 
+		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+					
+		if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint){
+
+			return true;
+		}
+
+		}	
+		return false;
+	}
+	public function getWarpPointPosition($position){
+
+		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+					
+			if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint){
+
+				return $grid_obj->getWarpPointOutputPosition();
+			}
+
+		}
+		return false;
+	}
 	public function placeObjectOnGrid(GridObjectInterface $object , $position ){
 		
+		if(  $object instanceof WallObjectInterface ){
+
+		if ($this->canPlaceObjectOnPosition($position , $object)){
+			return array_push( $this->_objects_on_the_grid , $object );
+		}
+
+		}
 
 		if ($this->canPlaceObjectOnPosition($position)){
 			return array_push( $this->_objects_on_the_grid , $object );
@@ -101,14 +154,11 @@ class Grid{
 
 		return true;
 	}
-	public function changePositionOfObject(Moveable $object){
-		// todo
-	}
 	public function gridPositionIsBlocked($position){
 
 			
 
-			if($this->gridPositionExists($position[0],$position[1])){
+
 			
 				foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
@@ -117,10 +167,7 @@ class Grid{
 						return true;
 					}
 				}
-			}
 			
-			return false;
-		
 
 		return false;
 

@@ -4,6 +4,9 @@ use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 
 use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
+use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ; 
+
+
 class Obstacle implements GridObjectInterface{
 	
 	protected $_x_position = null;
@@ -30,7 +33,11 @@ class Obstacle implements GridObjectInterface{
 	}
 
 	public function setInitialGridPosition( $position ){
-
+		
+		if($this->_grid_obj === null){
+			throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
+			
+		}
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 
 			$this->_x_position = $position[0];

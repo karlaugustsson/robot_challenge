@@ -11,6 +11,9 @@ use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOut
 
 use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
 
+use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ; 
+
+use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetException; 
 
 class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	
@@ -51,6 +54,11 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	}
 
 	public function getGrid(){
+
+		if($this->_grid_obj === null){
+			throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
+			return false;
+		}
 		return $this->_grid_obj;
 	}
 
@@ -72,21 +80,33 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 		try {
 
 
-			$this->_grid_obj->canPlaceObjectOnPosition($new_position);
-			$this->_x_position = $new_position[0];
-			$this->_y_position = $new_position[1];
+			if( $this->_grid_obj->canPlaceObjectOnPosition($new_position) ){
+				$warpPosition = $this->_grid_obj->getWarpPointPosition($new_position) ; 
+				if( $warpPosition != false ){
+					$this->_x_position = $warpPosition[0];
+					$this->_y_position = $warpPosition[1];	
+					var_dump("hepp");
+				}else{
+
+					$this->_x_position = $new_position[0];
+					$this->_y_position = $new_position[1];			
+				}
+
 			return $new_position;
+
+			}else{
+				$this->stop();
+				print "robot stopped becouse it hit a wall on position (" . $new_position[0] . "," . $new_position[1] . ")" ;  
+				return $this->getGridPosition();
+			}
+
 
 			} catch (GridPathIsBlockedException $e) {
 
 				$this->stop();
+				print "robot stopped becouse of obstacle blocking the way on position (" . $new_position[0] . "," . $new_position[1] . ")" ; 
 				return $e->getMessage();
 
-			} catch( GridPositionOutOfBoundsException $e){
-				
-				$this->stop();
-
-				return $this->getGridPosition();
 			}
 	}
 
@@ -94,11 +114,16 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 		return $this->_type;
 	}
 
-	public function getGridPosition(){
-		if ( $this->_x_position === null || $this->_y_position === null  ){
 
+	public function getGridPosition(){
+
+		if($this->_x_position === null || $this->_y_position === null){
+
+			throw new GridPositionNotSetException("No position on grid has been set");
 			return false;
+			
 		}
+	
 		return array($this->_x_position , $this->_y_position);
 	}
 
