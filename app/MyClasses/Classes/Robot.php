@@ -15,6 +15,8 @@ use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundExce
 
 use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetException; 
 
+use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+
 class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	
 	protected $_x_position = null;
@@ -34,16 +36,20 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	protected $_can_move ; 
 
 	
-	public function __construct($faceingDirection , Grid $gridObj){
+	public function __construct($faceingDirection , Grid $gridObj , $InitialGridPosition  = null){
 
 		$this->_type = "Robot" ; 
 		$this->setGrid($gridObj);
 		$this->setcanMove();
+
 		if ( ! $this->ValidFacingDirection($faceingDirection) ) {
 			
 			return false;
 		}
 
+		if ( $InitialGridPosition !== null ){
+			$this->setInitialGridPosition($InitialGridPosition);
+		}
 		$this->_faceing_direction = strtolower($faceingDirection) ;
 
 	}
@@ -62,8 +68,10 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 		return $this->_grid_obj;
 	}
 
-	public function setInitialGridPosition($position ){
-		
+	public function setInitialGridPosition($position){
+		if($this->_x_position !== null){
+			throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
+		}
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 
 			$this->_x_position = $position[0];

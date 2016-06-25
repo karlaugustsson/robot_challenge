@@ -33,19 +33,15 @@ class GridTest extends TestCase
         
         	$this->assertEquals(array(50,20),$grid->getGridDimensions());
 
+            $grid = new Grid("maju","cow");
+            
+            $this->assertEquals(array(0,0),$grid->getGridDimensions());
+
     		
 	}
-    /**
-     * Test failing grid
-     *
-     * @expectedException Exception
-     */
-    public function testInstanciatingFailingGrids(){
 
-    	$grid = new Grid("maju","cow");
-    }
     /**
-     * Test failing grid
+     * Test position exist
      *
      * @return void
      */
@@ -76,6 +72,7 @@ class GridTest extends TestCase
 		$this->assertEquals(true,$robot->setInitialGridPosition(array(2,2)));
 
 		//alse throws error position not found
+        $robot = new Robot("north",$grid);
 		$this->assertEquals(false,$robot->setInitialGridPosition(array(-60,2)));
 
 
@@ -109,6 +106,7 @@ class GridTest extends TestCase
 		$this->assertEquals(true,$grid->gridPositionIsBlocked(array(2,2)));
 
     }
+
     public function testValidWalkCommands(){
         $grid = new Grid(100,100);
         $robot = new Robot("South",$grid);
@@ -134,7 +132,7 @@ class GridTest extends TestCase
      */
     public function testInValidWalkCommands(){
         $grid = new Grid(50,50);
-        $robot = new Robot("North",$grid);
+        $robot = new Robot("North",$grid,array(0,0));
 
         
 
@@ -145,12 +143,9 @@ class GridTest extends TestCase
 
     public function testRobotWalkCommandsWithObstacle(){
         $grid = new Grid(100,100);
-        $robot = new Robot("North",$grid);
-        $obstacle = new Obstacle($grid);
-       
-        $this->assertEquals(true,$obstacle->setInitialGridPosition(array(48,50)));
-     
-        $this->assertEquals(true,$robot->setInitialGridPosition(array(50,50)));
+        $robot = new Robot("North",$grid,array(50,50));
+        $obstacle = new Obstacle($grid,array(48,50));
+
         $this->assertEquals(array(48,49),$robot->executeWalkCommand("fflffrbb"));
 
        
@@ -158,10 +153,10 @@ class GridTest extends TestCase
 
     public function testRobotWalkCommandsWithWarpPoint(){
         $grid = new Grid(100,100);
-        $robot = new Robot("North",$grid);
+        $robot = new Robot("North",$grid , array(50,0));
         $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
      
-        $this->assertEquals(true,$robot->setInitialGridPosition(array(50,0)));
+       
         $this->assertEquals(array(52,99),$robot->executeWalkCommand("ffrff"));
 
        

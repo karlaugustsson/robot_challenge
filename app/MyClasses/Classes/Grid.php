@@ -14,16 +14,6 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 	public function __construct($width,$height){
 
 
-		if( (int)$height == 0 ){
-			
-			throw new GridException("Grid height must be heigher than 0");	
-		}
-
-		if ( (int)$width == 0 ){
-			throw new GridException("Grid Width Must be wider than 0");	
-		}
-
-
 		$this->_height = (int)$height;
 		
 		$this->_width = (int)$width;

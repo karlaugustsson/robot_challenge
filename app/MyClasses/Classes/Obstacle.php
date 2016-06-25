@@ -5,7 +5,7 @@ use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
 use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ; 
-
+use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Obstacle implements GridObjectInterface{
 	
@@ -17,11 +17,15 @@ class Obstacle implements GridObjectInterface{
 
 	protected $_grid_obj;
 
-	public function __construct(Grid $GridObject){
+	public function __construct(Grid $GridObject , $InitialGridPosition  = null ){
 		
 		$this->type = "Obstacle";
 
 		$this->setGrid($GridObject);
+		
+		if ( $InitialGridPosition !== null ){
+			$this->setInitialGridPosition($InitialGridPosition);
+		}
 	}
 
 	public function setGrid($grid){
@@ -40,6 +44,9 @@ class Obstacle implements GridObjectInterface{
 
 	public function setInitialGridPosition( $position ){
 		
+		if($this->_x_position !== null){
+			throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
+		}
 
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 

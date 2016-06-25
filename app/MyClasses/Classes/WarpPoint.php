@@ -7,8 +7,8 @@ use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
 
 use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ; 
 use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetException; 
-
-
+use App\MyClasses\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException; 
+use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 //use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface ;
 
 class WarpPoint implements GridObjectInterface, WallObjectInterface{
@@ -42,7 +42,10 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface{
 
 	public function setInitialGridPosition($position ){
 
-
+		if($this->_x_position !== null){
+			throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
+		}
+		
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 
 			$this->_x_position = $position[0];
@@ -79,6 +82,9 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface{
 		$this->_warpOutput = $warpOutput ; 
 	}
 	public function getWarpPointOutputPosition(){
+		if($this->_warpOutput === null){
+		 throw new WarpOutputNotSetException("sorry nowhere to warp no warpoutput is set");
+		}
 		return $this->_warpOutput;
 	}
 }
