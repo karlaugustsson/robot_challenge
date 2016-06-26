@@ -104,20 +104,21 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 	public function getWarpPointPosition($position){
 		$found_output_positon = null;
 		
-		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+		foreach ($this->_objects_on_the_grid as $grid_obj) {
 					
 			if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint ){
 
-				$found_output_positon = $grid_obj->getWarpPointOutputPosition();
+				$found_output_positon = $grid_obj->getWarpEndpointPosition();
 			}
 
-			if( $this->gridPositionIsBlocked($found_output_positon) ){
 
-				throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position " . $found_output_positon[0] . " " . $found_output_positon[1] . "\n\r", 1);
-				
-				return false;
+		}
+
+		if( $found_output_positon ){
+			if ( !$this->gridPositionIsBlocked($found_output_positon) ){
+				return $found_output_positon;
 			}
-
+			throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position " . $found_output_positon[0] . " " . $found_output_positon[1] . "\n\r", 1);
 		}
 		return false;
 	}

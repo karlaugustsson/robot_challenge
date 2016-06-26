@@ -157,7 +157,7 @@ class GridTest extends TestCase
         $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
    
        
-        $this->assertEquals(array(50,0),$robot->executeWalkCommand("ffrff"));
+        $this->assertEquals(array(52,99),$robot->executeWalkCommand("ffrff"));
 
        
     }

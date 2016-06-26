@@ -22,7 +22,7 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface{
 		$this->_typeOfObject = "warppoint" ; 
 		$this->setGrid($grid);
 		$this->setInitialGridPosition($warpInput);
-		$this->setwarpOutputPosition($warpOutput);
+		$this->setwarpEndpointPosition($warpOutput);
 		
 	}
 
@@ -45,7 +45,7 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface{
 		if($this->_x_position !== null){
 			throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
 		}
-		
+
 		if( $this->getGrid()->placeObjectOnGrid($this,$position) ){
 
 			$this->_x_position = $position[0];
@@ -77,11 +77,11 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface{
 		return false;
 	}
 
-	public function setwarpOutputPosition($warpOutput){
+	public function setwarpEndPointPosition($warpOutput){
 		if($this->getGrid()->canPlaceObjectOnPosition($warpOutput));
 		$this->_warpOutput = $warpOutput ; 
 	}
-	public function getWarpPointOutputPosition(){
+	public function getWarpEndPointPosition(){
 		if($this->_warpOutput === null){
 		 throw new WarpOutputNotSetException("sorry nowhere to warp no warpoutput is set");
 		}

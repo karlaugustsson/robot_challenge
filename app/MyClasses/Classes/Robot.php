@@ -112,7 +112,7 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 
 
 			} catch (GridPathIsBlockedException $e) {
-
+	
 				$this->stop();
 				print $e->getMessage();
 				print "robot stopped on position (" . $new_position[0] . "," . $new_position[1] . ") \n\r" ;  
