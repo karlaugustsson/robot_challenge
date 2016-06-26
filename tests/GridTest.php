@@ -194,5 +194,17 @@ class GridTest extends TestCase
 
     }
 
+    public function testmoveRobotoverFlagToPickItUp(){
+        $grid = new Grid(100,100);
+        $flag = new Flag($grid , array(51,0));
+        $flag2 = new Flag($grid , array(52,0));
+        $robot = new Robot("east",$grid , array(50,0));
+        $this->assertEquals(array(54,0),$robot->executeWalkCommand("ffff"));
+
+        $this->assertEquals($flag,$robot->inventory()[0]);
+        $this->assertEquals($flag2,$robot->inventory()[1]);
+       
+    }
+
 
 }

@@ -93,7 +93,11 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface , CanGrabOb
 		try {
 
 
-			if( $this->_grid_obj->canPlaceObjectOnPosition($new_position)){
+			if( $this->getGrid()->canPlaceObjectOnPosition($new_position)){
+
+				if($this->getGrid()->PassabaleObjectFoundOnPosition($new_position)){
+					$this->grabObject($this->getGrid()->PassOverObjectFromPosition($new_position));
+				}
 				
 				$warpPosition = $this->_grid_obj->getWarpPointPosition($new_position) ; 
 				
