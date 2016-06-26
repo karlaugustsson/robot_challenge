@@ -80,7 +80,7 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 
 			
 		if ( $this->gridPositionIsBlocked($position) ){
-				throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid has already been taken by an blockable object");
+				throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid has already been taken by an blockable object ");
 				return false;
 		}
 
@@ -102,12 +102,20 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 		return false;
 	}
 	public function getWarpPointPosition($position){
-
+		$found_output_positon = null;
+		
 		foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
 			if($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint ){
 
-				return $grid_obj->getWarpPointOutputPosition();
+				$found_output_positon = $grid_obj->getWarpPointOutputPosition();
+			}
+
+			if( $this->gridPositionIsBlocked($found_output_positon) ){
+
+				throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position " . $found_output_positon[0] . " " . $found_output_positon[1] . "\n\r", 1);
+				
+				return false;
 			}
 
 		}

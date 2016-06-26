@@ -106,7 +106,7 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 
 			}else{
 				$this->stop();
-				print "robot stopped becouse it hit a wall on position (" . $new_position[0] . "," . $new_position[1] . ")" ;  
+				print "robot stopped becouse it hit a wall on position (" . $new_position[0] . "," . $new_position[1] . ")\n\r" ;  
 				return $this->getGridPosition();
 			}
 
@@ -114,7 +114,8 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			} catch (GridPathIsBlockedException $e) {
 
 				$this->stop();
-				print "robot stopped becouse of obstacle blocking the way on position (" . $new_position[0] . "," . $new_position[1] . ")" ; 
+				print $e->getMessage();
+				print "robot stopped on position (" . $new_position[0] . "," . $new_position[1] . ") \n\r" ;  
 				return $e->getMessage();
 
 			}

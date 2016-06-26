@@ -155,9 +155,19 @@ class GridTest extends TestCase
         $grid = new Grid(100,100);
         $robot = new Robot("North",$grid , array(50,0));
         $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
-     
+   
        
-        $this->assertEquals(array(52,99),$robot->executeWalkCommand("ffrff"));
+        $this->assertEquals(array(50,0),$robot->executeWalkCommand("ffrff"));
+
+       
+    }
+    public function testRobotHaltIfBlockedWarpEndPoint(){
+        $grid = new Grid(100,100);
+        $robot = new Robot("North",$grid , array(50,0));
+        $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
+        $obstacle = new Obstacle($grid,array(50,100));
+       
+        $this->assertEquals(array(50,0),$robot->executeWalkCommand("ffrff"));
 
        
     }
