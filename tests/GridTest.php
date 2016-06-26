@@ -182,6 +182,17 @@ class GridTest extends TestCase
         $this->assertEquals(0,count($grid->getObjectsOnGrid()));
 
     }
+    public function testPassoverFlagToRobot(){
+        $grid = new Grid(100,100);
+        $flag = new Flag($grid , array(50,0));
+        $robot = new Robot("North",$grid , array(50,0));
+        $this->assertEquals(true,$grid->PassabaleObjectFoundOnPosition(array(50,0)));
+        $this->assertEquals(2,count($grid->getObjectsOnGrid()));
+        $this->assertEquals(true,$robot->grabObject($grid->PassOverObjectFromPosition(array(50,0))));
+        $this->assertEquals($flag,$robot->inventory()[0]);
+        $this->assertEquals(1,count($grid->getObjectsOnGrid()));
+
+    }
 
 
 }

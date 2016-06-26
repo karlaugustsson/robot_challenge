@@ -4,6 +4,9 @@ use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 
 use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
+use App\MyClasses\Interfaces\CanGrabObjectsInterface as CanGrabObjectsInterface;
+
+use App\MyClasses\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
 
 use App\MyClasses\Exceptions\MoveableException as MoveableException; 
 
@@ -17,7 +20,7 @@ use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetEx
 
 use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
-class Robot Implements MoveableObjectInterface , GridObjectInterface {
+class Robot Implements MoveableObjectInterface , GridObjectInterface , CanGrabObjectsInterface {
 	
 	protected $_x_position = null;
 
@@ -34,6 +37,8 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 	protected $_valid_walk_commands = array("f","b","l","r") ;
 
 	protected $_can_move ; 
+
+	protected $_inventory = array() ; 
 
 	
 	public function __construct($faceingDirection , Grid $gridObj , $InitialGridPosition  = null){
@@ -325,6 +330,15 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface {
 			
 
 		return true;
+	}
+
+	public function grabObject(GrabbableObjectInterface $object){
+
+		array_push($this->_inventory, $object) ;
+		return true;
+	}
+	public function inventory(){
+		return $this->_inventory; 
 	}
 		
 		

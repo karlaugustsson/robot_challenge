@@ -2,6 +2,6 @@
 
 Interface CanGrabObjectsInterface {
 
-	public function PickUpObject();
+	public function grabObject(GrabbableObjectInterface $object);
 
 }
