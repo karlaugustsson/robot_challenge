@@ -10,6 +10,8 @@ use App\MyClasses\Classes\Obstacle as Obstacle;
 
 use App\MyClasses\Classes\WarpPoint as WarpPoint;
 
+use App\MyClasses\Classes\Flag as Flag;
+
 class GridTest extends TestCase
 {	
 	private $_grid;
@@ -170,6 +172,15 @@ class GridTest extends TestCase
         $this->assertEquals(array(50,0),$robot->executeWalkCommand("ffrff"));
 
        
+    }
+    public function testRemoveObjectFromGrid(){
+        $grid = new Grid(100,100);
+        $flag = new Flag($grid , array(50,0));
+        $this->assertEquals(true,$grid->PassabaleObjectFoundOnPosition(array(50,0)));
+        $this->assertEquals(1,count($grid->getObjectsOnGrid()));
+        $this->assertEquals($flag,$grid->PassOverObjectFromPosition(array(50,0)));
+        $this->assertEquals(0,count($grid->getObjectsOnGrid()));
+
     }
 
 

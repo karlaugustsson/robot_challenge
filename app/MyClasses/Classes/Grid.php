@@ -2,13 +2,16 @@
 use App\MyClasses\Exceptions\GridException as GridException;
 use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
 use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+use App\MyClasses\Exceptions\PassOverObjectException as PassOverObjectException ; 
 
 use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 use App\MyClasses\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
+use App\MyClasses\Interfaces\GridObjectsCanBePickedUpInterface as GridObjectsCanBePickedUpInterface;
+use App\MyClasses\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
 use App\MyClasses\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
 use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
 
-class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
+class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface, GridObjectsCanBePickedUpInterface{
 	private $_height,$_width;
 	private $_objects_on_the_grid = array();
 	public function __construct($width,$height){
@@ -38,6 +41,9 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 
 	private function getGridWidth(){
 		return $this->_width;
+	}
+	public function getObjectsOnGrid(){
+		return $this->_objects_on_the_grid;
 	}
 
 	public function gridPositionExists($x,$y){
@@ -159,9 +165,6 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 	public function gridPositionIsBlocked($position){
 
 			
-
-
-			
 				foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
 					
 					if($grid_obj->getGridPosition() === $position && $grid_obj->IsBlockable()){
@@ -174,5 +177,31 @@ class Grid implements CanPlaceObjectsInWallInterface , GridWarpPointInterface {
 		return false;
 
 
+	}
+	public function PassabaleObjectFoundOnPosition($position){
+
+		foreach ($this->_objects_on_the_grid  as $grid_obj) {
+			
+			if($grid_obj instanceof GrabbableObjectInterface && $position == $grid_obj->getGridPosition()){
+				return true;
+			
+			}
+
+		
+		}
+		return false;
+	}
+	public function PassOverObjectFromPosition($position){
+		
+		foreach ( $this->_objects_on_the_grid as $key => $grid_obj ) {
+			if($grid_obj instanceof GrabbableObjectInterface && $position = $grid_obj->getGridPosition()){
+				unset($this->_objects_on_the_grid[$key]);
+				return $grid_obj;	
+			}
+
+					
+		}
+
+		throw new PassOverObjectException("there was no object found , to be transfered \n\r") ; 
 	}
 }
