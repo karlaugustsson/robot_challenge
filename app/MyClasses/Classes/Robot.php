@@ -115,7 +115,7 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface , CanGrabOb
 
 			}else{
 				$this->stop();
-				print "robot stopped becouse it hit a wall on position (" . $new_position[0] . "," . $new_position[1] . ")\n\r" ;  
+				print "robot stopped becouse it hit a wall on position (" . $this->_x_position . "," . $this->_y_position . ")\n\r" ;  
 				return $this->getGridPosition();
 			}
 
@@ -124,7 +124,7 @@ class Robot Implements MoveableObjectInterface , GridObjectInterface , CanGrabOb
 	
 				$this->stop();
 				print $e->getMessage();
-				print "robot stopped on position (" . $new_position[0] . "," . $new_position[1] . ") \n\r" ;  
+				print "robot stopped on position (" . $this->_x_position . "," . $this->_y_position . ") \n\r" ;  
 				return $e->getMessage();
 
 			}
