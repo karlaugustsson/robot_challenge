@@ -4,25 +4,24 @@ use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
 
 use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
-use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ; 
+use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Obstacle implements GridObjectInterface{
-	
+
 	protected $_x_position = null;
 
 	protected $_y_position = null;
-
 	protected $_type;
 
 	protected $_grid_obj;
 
 	public function __construct(Grid $GridObject , $InitialGridPosition  = null ){
-		
+
 		$this->type = "Obstacle";
 
 		$this->setGrid($GridObject);
-		
+
 		if ( $InitialGridPosition !== null ){
 			$this->setInitialGridPosition($InitialGridPosition);
 		}
@@ -33,8 +32,8 @@ class Obstacle implements GridObjectInterface{
 	}
 
 	public function getGrid(){
-		
-		
+
+
 		if($this->_grid_obj === null){
 			throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
 			return false;
@@ -43,7 +42,7 @@ class Obstacle implements GridObjectInterface{
 	}
 
 	public function setInitialGridPosition( $position ){
-		
+
 		if($this->_x_position !== null){
 			throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
 		}
