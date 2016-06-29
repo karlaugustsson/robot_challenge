@@ -1,5 +1,4 @@
 <?php
 
-if(tralala == false) {
-
+if (tralala == false) {
 }

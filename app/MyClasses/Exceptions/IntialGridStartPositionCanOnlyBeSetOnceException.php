@@ -1,3 +1,7 @@
 <?php
 namespace App\MyClasses\Exceptions;
-class IntialGridStartPositionCanOnlyBeSetOnceException extends \Exception{}
+
+class IntialGridStartPositionCanOnlyBeSetOnceException extends \Exception
+{
+
+}

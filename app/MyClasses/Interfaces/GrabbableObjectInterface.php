@@ -1,6 +1,7 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-Interface GrabbableObjectInterface {
+interface GrabbableObjectInterface
+{
 
 
 }

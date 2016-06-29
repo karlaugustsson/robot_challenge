@@ -1,7 +1,7 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-Interface CanGrabObjectsInterface {
+interface CanGrabObjectsInterface
+{
 
-	public function grabObject(GrabbableObjectInterface $object);
-
+    public function grabObject(GrabbableObjectInterface $object);
 }

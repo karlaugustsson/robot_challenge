@@ -1,4 +1,7 @@
 <?php
 namespace App\MyClasses\Exceptions;
 
-class MoveableException extends \Exception{}
+class MoveableException extends \Exception
+{
+
+}

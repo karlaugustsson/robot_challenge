@@ -1,2 +1,6 @@
 <?php namespace App\MyClasses\Exceptions;
-class WarpOutputNotSetException extends \Exception{}
+
+class WarpOutputNotSetException extends \Exception
+{
+
+}

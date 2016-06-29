@@ -1,4 +1,7 @@
 <?php
 namespace App\MyClasses\Exceptions;
 
-class GridPathIsBlockedException extends \Exception{}
+class GridPathIsBlockedException extends \Exception
+{
+
+}

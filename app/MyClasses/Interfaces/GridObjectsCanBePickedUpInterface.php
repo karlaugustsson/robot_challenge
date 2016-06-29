@@ -1,7 +1,8 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-interface GridObjectsCanBePickedUpInterface{
+interface GridObjectsCanBePickedUpInterface
+{
 
-	public function PassabaleObjectFoundOnPosition($position);
-	public function PassOverObjectFromPosition($position);
+    public function PassabaleObjectFoundOnPosition($position);
+    public function PassOverObjectFromPosition($position);
 }

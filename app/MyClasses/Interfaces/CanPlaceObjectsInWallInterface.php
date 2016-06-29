@@ -1,12 +1,12 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-interface CanPlaceObjectsInWallInterface{
+interface CanPlaceObjectsInWallInterface
+{
 
 
-	public function canPlaceObjectOnPosition($position ,GridObjectInterface $object = null);
+    public function canPlaceObjectOnPosition($position, GridObjectInterface $object = null);
 
-	public function gridPositionExistsIncludeWalls($x,$y);
+    public function gridPositionExistsIncludeWalls($x, $y);
 
-	public function placeObjectOnGrid(GridObjectInterface $object , $position );
-
+    public function placeObjectOnGrid(GridObjectInterface $object, $position);
 }

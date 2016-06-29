@@ -1,5 +1,6 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-interface WallObjectInterface {
+interface WallObjectInterface
+{
 
 }

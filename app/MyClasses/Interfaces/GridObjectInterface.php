@@ -1,17 +1,18 @@
-<?php namespace App\MyClasses\Interfaces ; 
+<?php namespace App\MyClasses\Interfaces ;
 
-interface GridObjectInterface {
+interface GridObjectInterface
+{
 
 
-	public function setGrid($grid);
+    public function setGrid($grid);
 
-	public function getGrid();
+    public function getGrid();
 
-	public function setInitialGridPosition($position);
+    public function setInitialGridPosition($position);
 
-	public function getTypeOfGridObject();
+    public function getTypeOfGridObject();
 
-	public function getGridPosition();
+    public function getGridPosition();
 
-	public function IsBlockable();
+    public function IsBlockable();
 }

@@ -1,4 +1,4 @@
 <?php
 namespace App\MyClasses\Exceptions;
 
-class GridPositionNotSetException extends \Exception ; 
+class GridPositionNotSetException extends \Exception ;
