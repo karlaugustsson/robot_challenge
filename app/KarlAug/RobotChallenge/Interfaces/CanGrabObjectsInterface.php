@@ -1,4 +1,4 @@
-<?php namespace App\MyClasses\Interfaces ;
+<?php namespace KarlAug\RobotChallenge\Interfaces ;
 
 interface CanGrabObjectsInterface
 {

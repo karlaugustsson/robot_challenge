@@ -1,18 +1,21 @@
-<?php namespace App\MyClasses\Classes;
+<?php namespace KarlAug\RobotChallenge;
 
-use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 
-use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
 
-use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
-use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use KarlAug\KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException;
 
-class Obstacle implements GridObjectInterface
+use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+
+class Flag implements GridObjectInterface, GrabbableObjectInterface
 {
 
     protected $_x_position = null;
 
     protected $_y_position = null;
+
     protected $_type;
 
     protected $_grid_obj;
@@ -20,7 +23,7 @@ class Obstacle implements GridObjectInterface
     public function __construct(Grid $GridObject, $InitialGridPosition = null)
     {
 
-        $this->type = "Obstacle";
+        $this->type = "Flag";
 
         $this->setGrid($GridObject);
 
@@ -77,6 +80,6 @@ class Obstacle implements GridObjectInterface
 
     public function IsBlockable()
     {
-        return true;
+        return false;
     }
 }

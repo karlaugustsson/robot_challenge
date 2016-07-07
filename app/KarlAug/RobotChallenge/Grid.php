@@ -1,18 +1,18 @@
-<?php namespace App\MyClasses\Classes;
+<?php namespace KarlAug\RobotChallenge;
 
-use App\MyClasses\Exceptions\GridException as GridException;
-use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
-use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
-use App\MyClasses\Exceptions\PassOverObjectException as PassOverObjectException ;
+use KarlAug\RobotChallenge\Exceptions\GridException as GridException;
+use KarlAug\RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+use KarlAug\RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+use KarlAug\RobotChallenge\Exceptions\PassOverObjectException as PassOverObjectException ;
 
-use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
-use App\MyClasses\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
-use App\MyClasses\Interfaces\GridObjectsCanBePickedUpInterface as GridObjectsCanBePickedUpInterface;
-use App\MyClasses\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
-use App\MyClasses\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
-use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectsCanBePickedUpInterface as GridObjectsCanBePickedUpInterface;
+use KarlAug\RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
+use KarlAug\RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
 
-class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, GridObjectsCanBePickedUpInterface
+class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, GridObjectsCanBePickedUpInterface
 {
     private $_height,$_width;
     private $_objects_on_the_grid = array();
@@ -21,9 +21,9 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
 
 
         $this->_height = (int)$height;
-        
+
         $this->_width = (int)$width;
-        
+
         if ($this->_height < 0) {
             $this->_height = abs($height);
         }
@@ -57,20 +57,20 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
         if ($x <= $this->getGridWidth() && $y <= $this->getGridHeight() && $x >= 0 && $y >= 0  || $this->positionHasWarpPoint(array($x,$y)) == true) {
             return true;
         }
-        
+
 
         return false;
-    
+
     }
     public function gridPositionExistsIncludeWalls($x, $y)
     {
-        
+
         if ($x <= $this->getGridWidth() + 1 && $y <= $this->getGridHeight() + 1 && $x >= -1 && $y >= -1) {
             return true;
         }
-        
+
         return false;
-    
+
     }
     public function canPlaceObjectOnPosition($position, GridObjectInterface $object = null)
     {
@@ -86,10 +86,10 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
                     return false;
                 }
             }
-            
 
 
-            
+
+
             if ($this->gridPositionIsBlocked($position)) {
                 throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid has already been taken by an blockable object ");
                 return false;
@@ -113,7 +113,7 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
     public function getWarpPointPosition($position)
     {
         $found_output_positon = null;
-        
+
         foreach ($this->_objects_on_the_grid as $grid_obj) {
             if ($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint) {
                 $found_output_positon = $grid_obj->getWarpEndpointPosition();
@@ -130,7 +130,7 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
     }
     public function placeObjectOnGrid(GridObjectInterface $object, $position)
     {
-        
+
         if ($object instanceof WallObjectInterface) {
             if ($this->canPlaceObjectOnPosition($position, $object)) {
                 return array_push($this->_objects_on_the_grid, $object);
@@ -148,7 +148,7 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
 
     private function PositionArrayIsValid($position)
     {
-        
+
         if (!is_array($position)) {
             throw new GridException("argument position is expected to be an array", 1);
             return false;
@@ -163,13 +163,13 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
     public function gridPositionIsBlocked($position)
     {
 
-            
+
         foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
             if ($grid_obj->getGridPosition() === $position && $grid_obj->IsBlockable()) {
                 return true;
             }
         }
-            
+
 
         return false;
 
@@ -187,7 +187,7 @@ class Grid implements CanPlaceObjectsInWallInterface, GridWarpPointInterface, Gr
     }
     public function PassOverObjectFromPosition($position)
     {
-        
+
         foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
             if ($grid_obj instanceof GrabbableObjectInterface && $position = $grid_obj->getGridPosition()) {
                 unset($this->_objects_on_the_grid[$key]);

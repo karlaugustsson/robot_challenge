@@ -1,10 +1,10 @@
-<?php namespace App\MyClasses\Interfaces ;
+<?php namespace KarlAug\RobotChallenge\Interfaces ;
 
 interface MoveableObjectInterface
 {
 
     public function executeWalkCommand($Walkcommands);
-    
+
     public function validWalkCommand($Walkcommand);
     public function validFacingDirection($faceingDirection);
     public function setCanMove($bool = null);

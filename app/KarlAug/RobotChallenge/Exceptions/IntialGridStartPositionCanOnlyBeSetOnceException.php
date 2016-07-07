@@ -1,5 +1,5 @@
 <?php
-namespace App\MyClasses\Exceptions;
+namespace KarlAug\RobotChallenge\Exceptions;
 
 class IntialGridStartPositionCanOnlyBeSetOnceException extends \Exception
 {

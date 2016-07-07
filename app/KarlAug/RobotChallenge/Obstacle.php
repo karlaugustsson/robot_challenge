@@ -1,32 +1,30 @@
-<?php namespace App\MyClasses\Classes;
+<?php namespace KarlAug\RobotChallenge;
 
-use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 
-use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
-use App\MyClasses\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
-use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException;
+use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
-use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
-class Flag implements GridObjectInterface, GrabbableObjectInterface
+class Obstacle implements GridObjectInterface
 {
-    
+
     protected $_x_position = null;
 
     protected $_y_position = null;
-
     protected $_type;
 
     protected $_grid_obj;
 
     public function __construct(Grid $GridObject, $InitialGridPosition = null)
     {
-        
-        $this->type = "Flag";
+
+        $this->type = "Obstacle";
 
         $this->setGrid($GridObject);
-        
+
         if ($InitialGridPosition !== null) {
             $this->setInitialGridPosition($InitialGridPosition);
         }
@@ -39,8 +37,8 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 
     public function getGrid()
     {
-        
-        
+
+
         if ($this->_grid_obj === null) {
             throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
             return false;
@@ -50,7 +48,7 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 
     public function setInitialGridPosition($position)
     {
-        
+
         if ($this->_x_position !== null) {
             throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
         }
@@ -80,6 +78,6 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 
     public function IsBlockable()
     {
-        return false;
+        return true;
     }
 }

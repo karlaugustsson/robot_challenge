@@ -1,37 +1,37 @@
 <?php
-namespace App\MyClasses\Classes;
+namespace KarlAug\RobotChallenge;
 
-use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 
-use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
-use App\MyClasses\Interfaces\CanGrabObjectsInterface as CanGrabObjectsInterface;
+use KarlAug\RobotChallenge\Interfaces\CanGrabObjectsInterface as CanGrabObjectsInterface;
 
-use App\MyClasses\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
 
-use App\MyClasses\Exceptions\MoveableException as MoveableException;
+use KarlAug\RobotChallenge\Exceptions\MoveableException as MoveableException;
 
-use App\MyClasses\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
-use App\MyClasses\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
-use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
+use KarlAug\RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+use KarlAug\RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
-use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
+use KarlAug\RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
 
-use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as
+use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as
  IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObjectsInterface
 {
-    
+
     protected $x_position = null;
     protected $y_position = null;
 
     protected $type;
 
     protected $grid_obj;
-    
+
     protected $faceing_direction ;
-    
+
     protected $allowed_facing_directions = array( "north" , "south" , "east" , "west");
 
     protected $valid_walk_commands = array("f","b","l","r") ;
@@ -40,7 +40,7 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
 
     protected $inventory = array() ;
 
-    
+
     public function __construct($faceingDirection, Grid $gridObj, $InitialGridPosition = null)
     {
 
@@ -97,9 +97,9 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
                 if ($this->getGrid()->PassabaleObjectFoundOnPosition($new_position)) {
                     $this->grabObject($this->getGrid()->PassOverObjectFromPosition($new_position));
                 }
-                
+
                 $warpPosition = $this->grid_obj->getWarpPointPosition($new_position) ;
-                
+
                 if ($warpPosition != false) {
                     $this->x_position = $warpPosition[0];
                     $this->y_position = $warpPosition[1];
@@ -136,7 +136,7 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
             throw new GridPositionNotSetException("No position on grid has been set");
             return false;
         }
-    
+
         return array($this->x_position , $this->y_position);
     }
 
@@ -158,11 +158,11 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
     }
     public function executeWalkCommand($walkCommands)
     {
-        
+
 
         if (is_string($walkCommands)) {
             $convertedwalkCommands = array();
-            
+
             for ($i=0; $i < strlen($walkCommands); $i++) {
                 $convertedwalkCommands[] = substr($walkCommands, $i, 1);
             }
@@ -186,7 +186,7 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
             if (!$this->canMove()) {
                 break;
             }
-            
+
             switch (strtolower($command)) {
                 case 'l':
                     $this->changeDirectionLeft();
@@ -196,9 +196,9 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
                     break;
                 case 'f':
                     $this->tryNewPosition($this->moveForward());
-                    
+
                     break;
-                
+
                 default:
                     $this->tryNewPosition($this->moveBackwards());
                     break;
@@ -234,7 +234,7 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
             case 'west':
                 $this->setFacingdirection("north");
                 break;
-            
+
             case 'east':
                 $this->setFacingdirection("south");
                 break;
@@ -251,12 +251,12 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
         switch ($this->getFacingDirection()) {
             case 'south':
                 return array($this->x_position , $this->y_position + 1);
-                
+
             break;
-            
+
             case 'north':
                 return array($this->x_position , $this->y_position - 1);
-                
+
             break;
             case 'east':
                 return array($this->x_position + 1 , $this->y_position);
@@ -270,16 +270,16 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
     }
     public function moveBackwards()
     {
-        
+
         switch ($this->getFacingDirection()) {
             case 'south':
                 return array($this->x_position , $this->y_position - 1);
 
             break;
-            
+
             case 'north':
                 return array($this->x_position, $this->y_position + 1);
-                
+
             break;
             case 'east':
                 return array($this->x_position - 1, $this->y_position);
@@ -287,7 +287,7 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
 
             default:
                 return array($this->x_position + 1, $this->y_position);
-            
+
             break;
         }
     }
@@ -314,14 +314,14 @@ class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObje
     public function validWalkCommand($walkCommand)
     {
 
-    
-        
+
+
         if (!in_array(strtolower($walkCommand), $this->valid_walk_commands)) {
             throw new MoveableException("you have supplied invalid walkCommands");
-            
+
             return false;
         }
-            
+
 
         return true;
     }

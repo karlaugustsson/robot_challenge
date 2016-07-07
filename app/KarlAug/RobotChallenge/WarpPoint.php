@@ -1,15 +1,15 @@
-<?php namespace App\MyClasses\Classes ;
+<?php namespace KarlAug\RobotChallenge;
 
-use App\MyClasses\Interfaces\GridObjectInterface as GridObjectInterface ;
-use App\MyClasses\Interfaces\WallObjectInterface as WallObjectInterface;
+use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface ;
+use KarlAug\RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
 
 
-use App\MyClasses\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
-use App\MyClasses\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
-use App\MyClasses\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
-use App\MyClasses\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
+use KarlAug\RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
+use KarlAug\RobotChallenge\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
+use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
-//use App\MyClasses\Interfaces\MoveableObjectInterface as MoveableObjectInterface ;
+//use KarlAug\\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface ;
 
 class WarpPoint implements GridObjectInterface, WallObjectInterface
 {
@@ -25,7 +25,7 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
         $this->setGrid($grid);
         $this->setInitialGridPosition($warpInput);
         $this->setwarpEndpointPosition($warpOutput);
-        
+
     }
 
     public function setGrid($grid)
