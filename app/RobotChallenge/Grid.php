@@ -3,7 +3,7 @@
 use RobotChallenge\Exceptions\GridException as GridException;
 use RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
 use RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
-use RobotChallenge\Exceptions\PassOverObjectException as PassOverObjectException ;
+use RobotChallenge\Exceptions\passOverObjectException as passOverObjectException ;
 
 use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 use RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
@@ -12,49 +12,52 @@ use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterfa
 use RobotChallenge\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
 use RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
 
-class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, GridObjectsCanBePickedUpInterface
+class Grid implements GridWarpPointInterface, CanPlaceObjectsInWallInterface, GridObjectsCanBePickedUpInterface
 {
-    private $_height,$_width;
-    private $_objects_on_the_grid = array();
+    private $height;
+    private $width;
+    private $objects_on_the_grid = array();
+
     public function __construct($width, $height)
     {
 
 
-        $this->_height = (int)$height;
+        $this->height = (int)$height;
 
-        $this->_width = (int)$width;
+        $this->width = (int)$width;
 
-        if ($this->_height < 0) {
-            $this->_height = abs($height);
+        if ($this->height < 0) {
+            $this->height = abs($height);
         }
 
-        if ($this->_width < 0) {
-            $this->_width = abs($width);
+        if ($this->width < 0) {
+            $this->width = abs($width);
         }
     }
 
     public function getGridDimensions()
     {
-        return array($this->_width,$this->_height);
+        return array($this->width,$this->height);
     }
 
     private function getGridHeight()
     {
-        return $this->_height;
+        return $this->height;
     }
 
     private function getGridWidth()
     {
-        return $this->_width;
+        return $this->width;
     }
     public function getObjectsOnGrid()
     {
-        return $this->_objects_on_the_grid;
+        return $this->objects_on_the_grid;
     }
 
     public function gridPositionExists($x, $y)
     {
-        if ($x <= $this->getGridWidth() && $y <= $this->getGridHeight() && $x >= 0 && $y >= 0  || $this->positionHasWarpPoint(array($x,$y)) == true) {
+        if ($x <= $this->getGridWidth() && $y <= $this->getGridHeight() && $x >= 0 && $y >= 0
+            || $this->positionHasWarpPoint(array($x,$y)) == true) {
             return true;
         }
 
@@ -62,6 +65,7 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
         return false;
 
     }
+
     public function gridPositionExistsIncludeWalls($x, $y)
     {
 
@@ -72,10 +76,11 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
         return false;
 
     }
+
     public function canPlaceObjectOnPosition($position, GridObjectInterface $object = null)
     {
 
-        if ($this->PositionArrayIsValid($position)) {
+        if ($this->positionArrayIsValid($position)) {
             if ($object && $object instanceof  WallObjectInterface) {
                 if (!$this->gridPositionExistsIncludeWalls($position[0], $position[1])) {
                     throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
@@ -91,7 +96,8 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
 
 
             if ($this->gridPositionIsBlocked($position)) {
-                throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .") on the grid has already been taken by an blockable object ");
+                throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .
+                    ") on the grid has already been taken by an blockable object ");
                 return false;
             }
 
@@ -100,21 +106,23 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
 
         return false;
     }
+
     public function positionHasWarpPoint($position)
     {
 
-        foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+        foreach ($this->objects_on_the_grid as $key => $grid_obj) {
             if ($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint) {
                 return true;
             }
         }
         return false;
     }
+
     public function getWarpPointPosition($position)
     {
         $found_output_positon = null;
 
-        foreach ($this->_objects_on_the_grid as $grid_obj) {
+        foreach ($this->objects_on_the_grid as $grid_obj) {
             if ($grid_obj->getGridPosition() === $position && $grid_obj instanceof WarpPoint) {
                 $found_output_positon = $grid_obj->getWarpEndpointPosition();
             }
@@ -124,21 +132,23 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
             if (!$this->gridPositionIsBlocked($found_output_positon)) {
                 return $found_output_positon;
             }
-            throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position " . $found_output_positon[0] . " " . $found_output_positon[1] . "\n\r", 1);
+            throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position "
+             . $found_output_positon[0] . " " .$found_output_positon[1] . "\n\r", 1);
         }
         return false;
     }
+
     public function placeObjectOnGrid(GridObjectInterface $object, $position)
     {
 
         if ($object instanceof WallObjectInterface) {
             if ($this->canPlaceObjectOnPosition($position, $object)) {
-                return array_push($this->_objects_on_the_grid, $object);
+                return array_push($this->objects_on_the_grid, $object);
             }
         }
 
         if ($this->canPlaceObjectOnPosition($position)) {
-            return array_push($this->_objects_on_the_grid, $object);
+            return array_push($this->objects_on_the_grid, $object);
         }
 
         return false;
@@ -146,7 +156,7 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
 
     }
 
-    private function PositionArrayIsValid($position)
+    private function positionArrayIsValid($position)
     {
 
         if (!is_array($position)) {
@@ -160,12 +170,13 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
 
         return true;
     }
+
     public function gridPositionIsBlocked($position)
     {
 
 
-        foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
-            if ($grid_obj->getGridPosition() === $position && $grid_obj->IsBlockable()) {
+        foreach ($this->objects_on_the_grid as $key => $grid_obj) {
+            if ($grid_obj->getGridPosition() === $position && $grid_obj->isBlockable()) {
                 return true;
             }
         }
@@ -175,26 +186,28 @@ class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, Gri
 
 
     }
-    public function PassabaleObjectFoundOnPosition($position)
+
+    public function passabaleObjectFoundOnPosition($position)
     {
 
-        foreach ($this->_objects_on_the_grid as $grid_obj) {
+        foreach ($this->objects_on_the_grid as $grid_obj) {
             if ($grid_obj instanceof GrabbableObjectInterface && $position == $grid_obj->getGridPosition()) {
                 return true;
             }
         }
         return false;
     }
-    public function PassOverObjectFromPosition($position)
+
+    public function passOverObjectFromPosition($position)
     {
 
-        foreach ($this->_objects_on_the_grid as $key => $grid_obj) {
+        foreach ($this->objects_on_the_grid as $key => $grid_obj) {
             if ($grid_obj instanceof GrabbableObjectInterface && $position = $grid_obj->getGridPosition()) {
-                unset($this->_objects_on_the_grid[$key]);
+                unset($this->objects_on_the_grid[$key]);
                 return $grid_obj;
             }
         }
 
-        throw new PassOverObjectException("there was no object found , to be transfered \n\r") ;
+        throw new passOverObjectException("there was no object found , to be transfered \n\r") ;
     }
 }

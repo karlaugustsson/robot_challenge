@@ -1,4 +1,7 @@
 <?php
 namespace RobotChallenge\Exceptions;
 
-class GridPositionNotSetException extends \Exception ;
+class GridPositionNotSetException extends \Exception
+{
+
+}

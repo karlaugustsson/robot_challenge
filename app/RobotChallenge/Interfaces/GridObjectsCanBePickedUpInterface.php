@@ -3,6 +3,6 @@
 interface GridObjectsCanBePickedUpInterface
 {
 
-    public function PassabaleObjectFoundOnPosition($position);
-    public function PassOverObjectFromPosition($position);
+    public function passabaleObjectFoundOnPosition($position);
+    public function passOverObjectFromPosition($position);
 }

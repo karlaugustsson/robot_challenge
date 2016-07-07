@@ -6,17 +6,18 @@ use RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface
 
 use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException
+as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Obstacle implements GridObjectInterface
 {
 
-    protected $_x_position = null;
+    protected $x_position = null;
 
-    protected $_y_position = null;
-    protected $_type;
+    protected $y_position = null;
+    protected $type;
 
-    protected $_grid_obj;
+    protected $grid_obj;
 
     public function __construct(Grid $GridObject, $InitialGridPosition = null)
     {
@@ -49,13 +50,13 @@ class Obstacle implements GridObjectInterface
     public function setInitialGridPosition($position)
     {
 
-        if ($this->_x_position !== null) {
+        if ($this->x_position !== null) {
             throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
         }
 
         if ($this->getGrid()->placeObjectOnGrid($this, $position)) {
-            $this->_x_position = $position[0];
-            $this->_y_position = $position[1];
+            $this->x_position = $position[0];
+            $this->y_position = $position[1];
             return true;
         } else {
             return false;
@@ -70,13 +71,13 @@ class Obstacle implements GridObjectInterface
 
     public function getGridPosition()
     {
-        if (!$this->_x_position) {
+        if (!$this->x_position) {
             return false;
         }
-        return array($this->_x_position , $this->_y_position);
+        return array($this->x_position , $this->y_position);
     }
 
-    public function IsBlockable()
+    public function isBlockable()
     {
         return true;
     }

@@ -2,58 +2,54 @@
 
 use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface ;
 use RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
-
-
 use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 use RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
 use RobotChallenge\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
-
-//use KarlAug\\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface ;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException
+as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class WarpPoint implements GridObjectInterface, WallObjectInterface
 {
-    private $_grid_obj = null;
-    private $_x_position;
-    private $_y_position;
-    private $_typeOfObject;
-    private $_warpOutput;
+    private $grid_obj = null;
+    private $x_position;
+    private $y_position;
+    private $typeOfObject;
+    private $warpOutput;
 
     public function __construct(Grid $grid, $warpInput, $warpOutput)
     {
-        $this->_typeOfObject = "warppoint" ;
+        $this->typeOfObject = "warppoint" ;
         $this->setGrid($grid);
         $this->setInitialGridPosition($warpInput);
         $this->setwarpEndpointPosition($warpOutput);
-
     }
 
     public function setGrid($grid)
     {
-        $this->_grid_obj = $grid;
+        $this->grid_obj = $grid;
     }
 
 
     public function getGrid()
     {
 
-        if ($this->_grid_obj === null) {
+        if ($this->grid_obj === null) {
             throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
             return false;
         }
-        return $this->_grid_obj;
+        return $this->grid_obj;
     }
 
     public function setInitialGridPosition($position)
     {
 
-        if ($this->_x_position !== null) {
+        if ($this->x_position !== null) {
             throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
         }
 
         if ($this->getGrid()->placeObjectOnGrid($this, $position)) {
-            $this->_x_position = $position[0];
-            $this->_y_position = $position[1];
+            $this->x_position = $position[0];
+            $this->y_position = $position[1];
             return true;
         } else {
             return false;
@@ -63,22 +59,22 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
 
     public function getTypeOfGridObject()
     {
-        return $this->_typeOfObject ;
+        return $this->typeOfObject ;
     }
 
     public function getGridPosition()
     {
 
-        if ($this->_x_position === null || $this->_y_position == null) {
+        if ($this->x_position === null || $this->y_position == null) {
             throw new NoGridObjectFoundException("No position on grid has been set");
             return false;
         }
 
-        return array($this->_x_position , $this->_y_position);
+        return array($this->x_position , $this->y_position);
 
     }
 
-    public function IsBlockable()
+    public function isBlockable()
     {
         return false;
     }
@@ -86,14 +82,17 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
     public function setwarpEndPointPosition($warpOutput)
     {
         if ($this->getGrid()->canPlaceObjectOnPosition($warpOutput)) {
+            $this->warpOutput = $warpOutput ;
         }
-        $this->_warpOutput = $warpOutput ;
+        return false;
+
     }
+
     public function getWarpEndPointPosition()
     {
-        if ($this->_warpOutput === null) {
+        if ($this->warpOutput === null) {
             throw new WarpOutputNotSetException("sorry nowhere to warp no warpoutput is set");
         }
-        return $this->_warpOutput;
+        return $this->warpOutput;
     }
 }

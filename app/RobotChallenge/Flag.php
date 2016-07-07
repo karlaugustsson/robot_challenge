@@ -7,18 +7,19 @@ use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterfa
 
 use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException;
 
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException
+as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Flag implements GridObjectInterface, GrabbableObjectInterface
 {
 
-    protected $_x_position = null;
+    protected $x_position = null;
 
-    protected $_y_position = null;
+    protected $y_position = null;
 
-    protected $_type;
+    protected $type;
 
-    protected $_grid_obj;
+    protected $grid_obj;
 
     public function __construct(Grid $GridObject, $InitialGridPosition = null)
     {
@@ -34,30 +35,30 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 
     public function setGrid($grid)
     {
-        $this->_grid_obj = $grid;
+        $this->grid_obj = $grid;
     }
 
     public function getGrid()
     {
 
 
-        if ($this->_grid_obj === null) {
+        if ($this->grid_obj === null) {
             throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
             return false;
         }
-        return $this->_grid_obj;
+        return $this->grid_obj;
     }
 
     public function setInitialGridPosition($position)
     {
 
-        if ($this->_x_position !== null) {
+        if ($this->x_position !== null) {
             throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
         }
 
         if ($this->getGrid()->placeObjectOnGrid($this, $position)) {
-            $this->_x_position = $position[0];
-            $this->_y_position = $position[1];
+            $this->x_position = $position[0];
+            $this->y_position = $position[1];
             return true;
         } else {
             return false;
@@ -67,18 +68,18 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 
     public function getTypeOfGridObject()
     {
-        return $this->_type;
+        return $this->type;
     }
 
     public function getGridPosition()
     {
-        if (!$this->_x_position) {
+        if (!$this->x_position) {
             return false;
         }
-        return array($this->_x_position , $this->_y_position);
+        return array($this->x_position , $this->y_position);
     }
 
-    public function IsBlockable()
+    public function isBlockable()
     {
         return false;
     }

@@ -14,5 +14,5 @@ interface GridObjectInterface
 
     public function getGridPosition();
 
-    public function IsBlockable();
+    public function isBlockable();
 }
