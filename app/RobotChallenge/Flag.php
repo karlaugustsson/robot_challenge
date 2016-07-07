@@ -14,22 +14,19 @@ class Flag implements GridObjectInterface, GrabbableObjectInterface
 {
 
     protected $x_position = null;
-
     protected $y_position = null;
-
     protected $type;
-
     protected $grid_obj;
 
-    public function __construct(Grid $GridObject, $InitialGridPosition = null)
+    public function __construct(Grid $grid_object, $initial_grid_position = null)
     {
 
         $this->type = "Flag";
 
-        $this->setGrid($GridObject);
+        $this->setGrid($grid_object);
 
-        if ($InitialGridPosition !== null) {
-            $this->setInitialGridPosition($InitialGridPosition);
+        if ($initial_grid_position !== null) {
+            $this->setInitialGridPosition($initial_grid_position);
         }
     }
 

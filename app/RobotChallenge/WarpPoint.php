@@ -13,15 +13,15 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
     private $grid_obj = null;
     private $x_position;
     private $y_position;
-    private $typeOfObject;
-    private $warpOutput;
+    private $type_of_oject;
+    private $warp_output;
 
-    public function __construct(Grid $grid, $warpInput, $warpOutput)
+    public function __construct(Grid $grid, $warp_input, $warp_output)
     {
-        $this->typeOfObject = "warppoint" ;
+        $this->type_of_oject = "warppoint" ;
         $this->setGrid($grid);
-        $this->setInitialGridPosition($warpInput);
-        $this->setwarpEndpointPosition($warpOutput);
+        $this->setInitialGridPosition($warp_input);
+        $this->setwarpEndpointPosition($warp_output);
     }
 
     public function setGrid($grid)
@@ -59,7 +59,7 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
 
     public function getTypeOfGridObject()
     {
-        return $this->typeOfObject ;
+        return $this->type_of_oject ;
     }
 
     public function getGridPosition()
@@ -79,10 +79,10 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
         return false;
     }
 
-    public function setwarpEndPointPosition($warpOutput)
+    public function setwarpEndPointPosition($warp_output)
     {
-        if ($this->getGrid()->canPlaceObjectOnPosition($warpOutput)) {
-            $this->warpOutput = $warpOutput ;
+        if ($this->getGrid()->canPlaceObjectOnPosition($warp_output)) {
+            $this->warp_output = $warp_output ;
         }
         return false;
 
@@ -90,9 +90,9 @@ class WarpPoint implements GridObjectInterface, WallObjectInterface
 
     public function getWarpEndPointPosition()
     {
-        if ($this->warpOutput === null) {
+        if ($this->warp_output === null) {
             throw new WarpOutputNotSetException("sorry nowhere to warp no warpoutput is set");
         }
-        return $this->warpOutput;
+        return $this->warp_output;
     }
 }

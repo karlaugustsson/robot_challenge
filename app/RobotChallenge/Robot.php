@@ -12,7 +12,9 @@ use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterfa
 use RobotChallenge\Exceptions\MoveableException as MoveableException;
 
 use RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+
 use RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+
 use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
 use RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
@@ -28,36 +30,29 @@ class Robot implements
 
     protected $x_position = null;
     protected $y_position = null;
-
     protected $type;
-
     protected $grid_obj;
-
     protected $faceing_direction ;
-
     protected $allowed_facing_directions = array( "north" , "south" , "east" , "west");
-
     protected $valid_walk_commands = array("f","b","l","r") ;
-
     protected $can_move ;
-
     protected $inventory = array() ;
 
-    public function __construct($faceingDirection, Grid $gridObj, $InitialGridPosition = null)
+    public function __construct($faceing_direction, Grid $grid_obj, $initial_grid_position = null)
     {
 
         $this->type = "Robot" ;
-        $this->setGrid($gridObj);
+        $this->setGrid($grid_obj);
         $this->setcanMove();
 
-        if (!$this->ValidFacingDirection($faceingDirection)) {
+        if (!$this->ValidFacingDirection($faceing_direction)) {
             return false;
         }
 
-        if ($InitialGridPosition !== null) {
-            $this->setInitialGridPosition($InitialGridPosition);
+        if ($initial_grid_position !== null) {
+            $this->setInitialGridPosition($initial_grid_position);
         }
-        $this->faceing_direction = strtolower($faceingDirection) ;
+        $this->faceing_direction = strtolower($faceing_direction) ;
 
     }
 
@@ -161,32 +156,32 @@ class Robot implements
         return $this->can_move ;
     }
 
-    public function executeWalkCommand($walkCommands)
+    public function executeWalkCommand($walk_commands)
     {
 
-        if (is_string($walkCommands)) {
+        if (is_string($walk_commands)) {
             $convertedwalkCommands = array();
 
-            for ($i=0; $i < strlen($walkCommands); $i++) {
-                $convertedwalkCommands[] = substr($walkCommands, $i, 1);
+            for ($i=0; $i < strlen($walk_commands); $i++) {
+                $convertedwalkCommands[] = substr($walk_commands, $i, 1);
             }
 
-            $walkCommands = $convertedwalkCommands;
+            $walk_commands = $convertedwalkCommands;
         }
 
-        if (!is_array($walkCommands)) {
+        if (!is_array($walk_commands)) {
             throw new MoveableException("WalkCommands are expected to be a string or array");
             return false;
         }
 
-        foreach ($walkCommands as $command) {
+        foreach ($walk_commands as $command) {
             if (!$this->validWalkCommand($command)) {
                 return false;
             }
         }
 
 
-        foreach ($walkCommands as $key => $command) {
+        foreach ($walk_commands as $key => $command) {
             if (!$this->canMove()) {
                 break;
             }
@@ -306,14 +301,14 @@ class Robot implements
         $this->faceing_direction = $direction ;
     }
 
-    public function validFacingDirection($faceingDirection)
+    public function validFacingDirection($facing_direction)
     {
-        if (in_array(strtolower($faceingDirection), $this->allowed_facing_directions)) {
+        if (in_array(strtolower($facing_direction), $this->allowed_facing_directions)) {
             return true;
         }
 
         throw new MoveableException("allowed facing directions for this class is " .
-                implode(",", $this->allowed_facing_directions) . " you gave : " . $faceingDirection);
+                implode(",", $this->allowed_facing_directions) . " you gave : " . $facing_direction);
         return false;
     }
 
