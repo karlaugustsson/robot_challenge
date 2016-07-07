@@ -1,16 +1,16 @@
-<?php namespace KarlAug\RobotChallenge;
+<?php namespace RobotChallenge;
 
-use KarlAug\RobotChallenge\Exceptions\GridException as GridException;
-use KarlAug\RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
-use KarlAug\RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
-use KarlAug\RobotChallenge\Exceptions\PassOverObjectException as PassOverObjectException ;
+use RobotChallenge\Exceptions\GridException as GridException;
+use RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+use RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+use RobotChallenge\Exceptions\PassOverObjectException as PassOverObjectException ;
 
-use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
-use KarlAug\RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
-use KarlAug\RobotChallenge\Interfaces\GridObjectsCanBePickedUpInterface as GridObjectsCanBePickedUpInterface;
-use KarlAug\RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
-use KarlAug\RobotChallenge\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
-use KarlAug\RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
+use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
+use RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface as CanPlaceObjectsInWallInterface;
+use RobotChallenge\Interfaces\GridObjectsCanBePickedUpInterface as GridObjectsCanBePickedUpInterface;
+use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use RobotChallenge\Interfaces\GridWarpPointInterface as GridWarpPointInterface;
+use RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
 
 class Grid implements GridWarpPointInterface,CanPlaceObjectsInWallInterface, GridObjectsCanBePickedUpInterface
 {

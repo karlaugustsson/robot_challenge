@@ -1,4 +1,4 @@
-<?php namespace KarlAug\RobotChallenge\Interfaces ;
+<?php namespace RobotChallenge\Interfaces ;
 
 interface MoveableObjectInterface
 {

@@ -2,16 +2,16 @@
 
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
-use KarlAug\RobotChallenge\Grid as Grid;
+use RobotChallenge\Grid as Grid;
 
-use KarlAug\RobotChallenge\Robot as Robot;
+use RobotChallenge\Robot as Robot;
 
-use KarlAug\RobotChallenge\Obstacle as Obstacle;
+use RobotChallenge\Obstacle as Obstacle;
 
 
-use KarlAug\RobotChallenge\WarpPoint as WarpPoint;
+use RobotChallenge\WarpPoint as WarpPoint;
 
-use KarlAug\RobotChallenge\Flag as Flag;
+use RobotChallenge\Flag as Flag;
 
 class GridTest extends TestCase
 {

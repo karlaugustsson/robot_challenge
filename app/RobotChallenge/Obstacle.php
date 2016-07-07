@@ -1,12 +1,12 @@
-<?php namespace KarlAug\RobotChallenge;
+<?php namespace RobotChallenge;
 
-use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
+use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 
-use KarlAug\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
+use RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
-use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
+use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
-use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Obstacle implements GridObjectInterface
 {

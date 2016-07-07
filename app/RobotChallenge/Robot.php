@@ -1,23 +1,23 @@
 <?php
-namespace KarlAug\RobotChallenge;
+namespace RobotChallenge;
 
-use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
+use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
 
-use KarlAug\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
+use RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
 
-use KarlAug\RobotChallenge\Interfaces\CanGrabObjectsInterface as CanGrabObjectsInterface;
+use RobotChallenge\Interfaces\CanGrabObjectsInterface as CanGrabObjectsInterface;
 
-use KarlAug\RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
 
-use KarlAug\RobotChallenge\Exceptions\MoveableException as MoveableException;
+use RobotChallenge\Exceptions\MoveableException as MoveableException;
 
-use KarlAug\RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
-use KarlAug\RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
-use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
+use RobotChallenge\Exceptions\GridPositionOutOfBoundsException as GridPositionOutOfBoundsException;
+use RobotChallenge\Exceptions\GridPathIsBlockedException  as GridPathIsBlockedException;
+use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
 
-use KarlAug\RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
+use RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
 
-use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as
  IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Robot implements MoveableObjectInterface, GridObjectInterface, CanGrabObjectsInterface

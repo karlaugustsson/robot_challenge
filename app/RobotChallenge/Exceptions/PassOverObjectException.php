@@ -1,4 +1,4 @@
-<?php namespace KarlAug\RobotChallenge\Exceptions;
+<?php namespace RobotChallenge\Exceptions;
 
 class PassOverObjectException extends \Exception
 {

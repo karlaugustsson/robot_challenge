@@ -1,13 +1,13 @@
-<?php namespace KarlAug\RobotChallenge;
+<?php namespace RobotChallenge;
 
-use KarlAug\RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface ;
-use KarlAug\RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
+use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface ;
+use RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
 
 
-use KarlAug\RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
-use KarlAug\RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
-use KarlAug\RobotChallenge\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
-use KarlAug\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
+use RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
+use RobotChallenge\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException as IntialGridStartPositionCanOnlyBeSetOnceException;
 
 //use KarlAug\\RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface ;
 

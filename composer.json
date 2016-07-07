@@ -22,7 +22,7 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "KarlAug\\": "app/KarlAug/"
+            "RobotChallenge\\": "app/RobotChallenge/"
         }
     },
     "autoload-dev": {

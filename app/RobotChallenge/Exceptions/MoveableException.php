@@ -1,5 +1,5 @@
 <?php
-namespace KarlAug\RobotChallenge\Exceptions;
+namespace RobotChallenge\Exceptions;
 
 class MoveableException extends \Exception
 {
