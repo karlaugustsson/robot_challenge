@@ -1,25 +1,25 @@
 <?php
 namespace RobotChallenge;
 
-use RobotChallenge\Interfaces\GridObjectInterface ;
+use App\RobotChallenge\Interfaces\GridObjectInterface ;
 
-use RobotChallenge\Interfaces\MoveableObjectInterface ;
+use App\RobotChallenge\Interfaces\MoveableObjectInterface ;
 
-use RobotChallenge\Interfaces\CanGrabObjectsInterface ;
+use App\RobotChallenge\Interfaces\CanGrabObjectsInterface ;
 
-use RobotChallenge\Interfaces\GrabbableObjectInterface ;
+use App\RobotChallenge\Interfaces\GrabbableObjectInterface ;
 
-use RobotChallenge\Exceptions\MoveableException ;
+use App\RobotChallenge\Exceptions\MoveableException ;
 
-use RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
+use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
 
-use RobotChallenge\Exceptions\GridPathIsBlockedException  ;
+use App\RobotChallenge\Exceptions\GridPathIsBlockedException  ;
 
-use RobotChallenge\Exceptions\NoGridObjectFoundException ;
+use App\RobotChallenge\Exceptions\NoGridObjectFoundException ;
 
-use RobotChallenge\Exceptions\GridPositionNotSetException ;
+use App\RobotChallenge\Exceptions\GridPositionNotSetException ;
 
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException;
+use App\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException;
 
 class Robot implements
     MoveableObjectInterface,

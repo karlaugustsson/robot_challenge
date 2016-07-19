@@ -1,4 +1,4 @@
-<?php namespace RobotChallenge\Interfaces ;
+<?php namespace App\RobotChallenge\Interfaces ;
 
 interface GridObjectInterface
 {

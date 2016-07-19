@@ -1,4 +1,4 @@
-<?php namespace RobotChallenge\Exceptions;
+<?php namespace App\RobotChallenge\Exceptions;
 
 class NoGridObjectFoundException extends \Exception
 {

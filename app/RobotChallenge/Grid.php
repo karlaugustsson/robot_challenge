@@ -1,16 +1,16 @@
 <?php namespace RobotChallenge;
 
-use RobotChallenge\Exceptions\GridException ;
-use RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
-use RobotChallenge\Exceptions\GridPathIsBlockedException  ;
-use RobotChallenge\Exceptions\passOverObjectException ;
+use App\RobotChallenge\Exceptions\GridException ;
+use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
+use App\RobotChallenge\Exceptions\GridPathIsBlockedException  ;
+use App\RobotChallenge\Exceptions\passOverObjectException ;
 
-use RobotChallenge\Interfaces\GridObjectInterface ;
-use RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface ;
-use RobotChallenge\Interfaces\GridObjectsCanBePickedUpInterface ;
-use RobotChallenge\Interfaces\GrabbableObjectInterface ;
-use RobotChallenge\Interfaces\GridWarpPointInterface ;
-use RobotChallenge\Interfaces\WallObjectInterface ;
+use App\RobotChallenge\Interfaces\GridObjectInterface ;
+use App\RobotChallenge\Interfaces\CanPlaceObjectsInWallInterface ;
+use App\RobotChallenge\Interfaces\GridObjectsCanBePickedUpInterface ;
+use App\RobotChallenge\Interfaces\GrabbableObjectInterface ;
+use App\RobotChallenge\Interfaces\GridWarpPointInterface ;
+use App\RobotChallenge\Interfaces\WallObjectInterface ;
 
 class Grid implements GridWarpPointInterface, CanPlaceObjectsInWallInterface, GridObjectsCanBePickedUpInterface
 {
