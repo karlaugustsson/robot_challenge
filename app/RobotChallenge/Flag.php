@@ -1,14 +1,13 @@
 <?php namespace RobotChallenge;
 
-use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface;
+use RobotChallenge\Interfaces\GridObjectInterface ;
 
-use RobotChallenge\Interfaces\MoveableObjectInterface as MoveableObjectInterface;
-use RobotChallenge\Interfaces\GrabbableObjectInterface as GrabbableObjectInterface;
+use RobotChallenge\Interfaces\MoveableObjectInterface ;
+use RobotChallenge\Interfaces\GrabbableObjectInterface ;
 
-use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException;
+use RobotChallenge\Exceptions\NoGridObjectFoundException ;
 
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException
-as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException ;
 
 class Flag implements GridObjectInterface, GrabbableObjectInterface
 {

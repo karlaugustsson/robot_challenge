@@ -1,12 +1,12 @@
 <?php namespace RobotChallenge;
 
-use RobotChallenge\Interfaces\GridObjectInterface as GridObjectInterface ;
-use RobotChallenge\Interfaces\WallObjectInterface as WallObjectInterface;
-use RobotChallenge\Exceptions\NoGridObjectFoundException as NoGridObjectFoundException ;
-use RobotChallenge\Exceptions\GridPositionNotSetException as GridPositionNotSetException;
-use RobotChallenge\Exceptions\WarpOutputNotSetException as WarpOutputNotSetException;
-use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException
-as IntialGridStartPositionCanOnlyBeSetOnceException;
+use RobotChallenge\Interfaces\GridObjectInterface ;
+use RobotChallenge\Interfaces\WallObjectInterface ;
+use RobotChallenge\Exceptions\NoGridObjectFoundException ;
+use RobotChallenge\Exceptions\GridPositionNotSetException;
+use RobotChallenge\Exceptions\WarpOutputNotSetException ;
+use RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException ;
+
 
 class WarpPoint implements GridObjectInterface, WallObjectInterface
 {
