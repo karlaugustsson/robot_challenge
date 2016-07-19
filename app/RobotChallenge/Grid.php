@@ -80,7 +80,7 @@ class Grid implements GridWarpPointInterface, CanPlaceObjectsInWallInterface, Gr
     public function canPlaceObjectOnPosition($position, GridObjectInterface $object = null)
     {
 
-        if ($this->positionArrayIsValid($position)) {
+        if ($this->positionarrayIsValid($position)) {
             if ($object && $object instanceof  WallObjectInterface) {
                 if (!$this->gridPositionExistsIncludeWalls($position[0], $position[1])) {
                     throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
@@ -156,7 +156,7 @@ class Grid implements GridWarpPointInterface, CanPlaceObjectsInWallInterface, Gr
 
     }
 
-    private function positionArrayIsValid($position)
+    private function positionarrayIsValid($position)
     {
 
         if (!is_array($position)) {
