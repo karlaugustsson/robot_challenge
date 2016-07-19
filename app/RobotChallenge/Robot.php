@@ -1,5 +1,5 @@
 <?php
-namespace RobotChallenge;
+namespace App\RobotChallenge;
 
 use App\RobotChallenge\Interfaces\GridObjectInterface ;
 

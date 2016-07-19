@@ -1,4 +1,4 @@
-<?php namespace RobotChallenge;
+<?php namespace App\RobotChallenge;
 
 use App\RobotChallenge\Exceptions\GridException ;
 use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
