@@ -1,6 +1,6 @@
 <?php namespace App\RobotChallenge\Interfaces ;
 
-interface GridObjectInterface
+interface GridItemInterface
 {
 
 
@@ -10,7 +10,7 @@ interface GridObjectInterface
 
     public function setInitialGridPosition($position);
 
-    public function getTypeOfGridObject();
+    public function getTypeOfItem();
 
     public function getGridPosition();
 

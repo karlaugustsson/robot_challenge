@@ -1,83 +1,75 @@
 <?php
 namespace App\RobotChallenge;
 
-use App\RobotChallenge\Interfaces\GridObjectInterface ;
+use App\RobotChallenge\Interfaces\GridItemInterface ;
+use App\RobotChallenge\Interfaces\ItemCanMoveInterface ;
+use App\RobotChallenge\Interfaces\CanGrabItemsInterface ;
+use App\RobotChallenge\Interfaces\CanBeGrabbedInterface ;
 
-use App\RobotChallenge\Interfaces\MoveableObjectInterface ;
-
-use App\RobotChallenge\Interfaces\CanGrabObjectsInterface ;
-
-use App\RobotChallenge\Interfaces\GrabbableObjectInterface ;
-
-use App\RobotChallenge\Exceptions\MoveableException ;
-
+use App\RobotChallenge\Exceptions\InvalidWalkCommandException ;
 use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
-
 use App\RobotChallenge\Exceptions\GridPathIsBlockedException  ;
-
-use App\RobotChallenge\Exceptions\NoGridObjectFoundException ;
-
+use App\RobotChallenge\Exceptions\NoGridInstanceFoundException ;
 use App\RobotChallenge\Exceptions\GridPositionNotSetException ;
-
-use App\RobotChallenge\Exceptions\IntialGridStartPositionCanOnlyBeSetOnceException;
+use App\RobotChallenge\Exceptions\IntialGridPositionCanOnlyBeSetOnceException;
 
 class Robot implements
-    MoveableObjectInterface,
-    GridObjectInterface,
-    CanGrabObjectsInterface
+    ItemCanMoveInterface,
+    GridItemInterface,
+    CanGrabItemsInterface
 {
 
-    protected $x_position = null;
-    protected $y_position = null;
+    protected $xPosition = null;
+    protected $yPosition = null;
     protected $type;
-    protected $grid_obj;
-    protected $faceing_direction ;
-    protected $allowed_facing_directions = array( "north" , "south" , "east" , "west");
-    protected $valid_walk_commands = array("f","b","l","r") ;
-    protected $can_move ;
+    protected $gridInstance;
+    protected $faceingDirection ;
+    protected $allowedDirections = array( "north" , "south" , "east" , "west");
+    protected $valid_walkCommands = array("f","b","l","r") ;
+    protected $canMove ;
     protected $inventory = array() ;
 
-    public function __construct($faceing_direction, Grid $grid_obj, $initial_grid_position = null)
+    public function __construct($direction, Grid $gridInstance, $initialGridPosition = null)
     {
 
         $this->type = "Robot" ;
-        $this->setGrid($grid_obj);
+        $this->setGrid($gridInstance);
         $this->setcanMove();
 
-        if (!$this->ValidFacingDirection($faceing_direction)) {
+        if (!$this->validDirection($direction)) {
             return false;
         }
 
-        if ($initial_grid_position !== null) {
-            $this->setInitialGridPosition($initial_grid_position);
+        if ($initialGridPosition !== null) {
+            $this->setInitialGridPosition($initialGridPosition);
         }
-        $this->faceing_direction = strtolower($faceing_direction) ;
+        $this->direction = strtolower($direction) ;
 
     }
 
     public function setGrid($grid)
     {
-        $this->grid_obj = $grid;
+        $this->gridInstance = $grid;
     }
 
     public function getGrid()
     {
 
-        if ($this->grid_obj === null) {
-            throw new NoGridObjectFoundException("cant set position becouse no grid object has been set");
+        if ($this->gridInstance === null) {
+            throw new NogridInstanceectFoundException("cant set position becouse no grid instance has been set");
             return false;
         }
-        return $this->grid_obj;
+        return $this->gridInstance;
     }
 
     public function setInitialGridPosition($position)
     {
-        if ($this->x_position !== null) {
+        if ($this->xPosition !== null) {
             throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
         }
-        if ($this->getGrid()->placeObjectOnGrid($this, $position)) {
-            $this->x_position = $position[0];
-            $this->y_position = $position[1];
+        if ($this->getGrid()->placeItemOnGrid($this, $position)) {
+            $this->xPosition = $position[0];
+            $this->yPosition = $position[1];
             return true;
         } else {
             return false;
@@ -85,40 +77,41 @@ class Robot implements
 
     }
 
-    public function tryNewPosition($new_position)
+    public function tryNewPosition($newPosition)
     {
         try {
-            if ($this->getGrid()->canPlaceObjectOnPosition($new_position)) {
-                if ($this->getGrid()->PassabaleObjectFoundOnPosition($new_position)) {
-                    $this->grabObject($this->getGrid()->PassOverObjectFromPosition($new_position));
+            if ($this->getGrid()->canPlaceItemOnPosition($newPosition)) {
+
+                if ($this->getGrid()->IsPassableItemFoundOnPosition($newPosition)){
+                    $this->grabItem($this->getGrid()->getPassableItemOnPosition($newPosition));
                 }
 
-                $warpPosition = $this->grid_obj->getWarpPointPosition($new_position) ;
+                $warpPosition = $this->getGrid()->getWarpPointPosition($newPosition) ;
 
                 if ($warpPosition != false) {
-                    $this->x_position = $warpPosition[0];
-                    $this->y_position = $warpPosition[1];
+                    $this->xPosition = $warpPosition[0];
+                    $this->yPosition = $warpPosition[1];
                 } else {
-                    $this->x_position = $new_position[0];
-                    $this->y_position = $new_position[1];
+                    $this->xPosition = $newPosition[0];
+                    $this->yPosition = $newPosition[1];
                 }
 
-                return $new_position;
+                return $newPosition;
             } else {
                 $this->stop();
                 print "robot stopped becouse it hit a wall on position ("
-                    . $this->x_position . "," . $this->y_position . ")\n\r" ;
+                    . $this->xPosition . "," . $this->yPosition . ")\n\r" ;
                 return $this->getGridPosition();
             }
         } catch (GridPathIsBlockedException $e) {
             $this->stop();
             print $e->getMessage();
-            print "robot stopped on position (" . $this->x_position . "," . $this->y_position . ") \n\r" ;
+            print "robot stopped on position (" . $this->xPosition . "," . $this->yPosition . ") \n\r" ;
             return $e->getMessage();
         }
     }
 
-    public function getTypeOfGridObject()
+    public function getTypeOfItem()
     {
         return $this->type;
     }
@@ -127,12 +120,12 @@ class Robot implements
     public function getGridPosition()
     {
 
-        if ($this->x_position === null || $this->y_position === null) {
+        if ($this->xPosition === null || $this->yPosition === null) {
             throw new GridPositionNotSetException("No position on grid has been set");
             return false;
         }
 
-        return array($this->x_position , $this->y_position);
+        return array($this->xPosition , $this->yPosition);
     }
 
     public function isBlockable()
@@ -142,45 +135,45 @@ class Robot implements
 
     public function stop()
     {
-        $this->can_move = false;
+        $this->canMove = false;
     }
 
     public function setCanMove($bool = null)
     {
-        $this->can_move = $bool || true;
+        $this->canMove = $bool || true;
     }
 
     public function canMove()
     {
-        return $this->can_move ;
+        return $this->canMove ;
     }
 
-    public function executeWalkCommand($walk_commands)
+    public function executeWalkCommand($walkCommands)
     {
 
-        if (is_string($walk_commands)) {
+        if (is_string($walkCommands)) {
             $convertedwalkCommands = array();
 
-            for ($i=0; $i < strlen($walk_commands); $i++) {
-                $convertedwalkCommands[] = substr($walk_commands, $i, 1);
+            for ($i=0; $i < strlen($walkCommands); $i++) {
+                $convertedwalkCommands[] = substr($walkCommands, $i, 1);
             }
 
-            $walk_commands = $convertedwalkCommands;
+            $walkCommands = $convertedwalkCommands;
         }
 
-        if (!is_array($walk_commands)) {
+        if (!is_array($walkCommands)) {
             throw new MoveableException("WalkCommands are expected to be a string or array");
             return false;
         }
 
-        foreach ($walk_commands as $command) {
+        foreach ($walkCommands as $command) {
             if (!$this->validWalkCommand($command)) {
                 return false;
             }
         }
 
 
-        foreach ($walk_commands as $key => $command) {
+        foreach ($walkCommands as $key => $command) {
             if (!$this->canMove()) {
                 break;
             }
@@ -208,113 +201,113 @@ class Robot implements
 
     public function changeDirectionLeft()
     {
-        switch ($this->getFacingDirection()) {
+        switch ($this->getDirection()) {
             case 'west':
-                $this->setFacingdirection("south");
+                $this->setDirection("south");
                 break;
 
             case 'east':
-                $this->setFacingdirection("north");
+                $this->setDirection("north");
                 break;
             case "north":
-                $this->setFacingdirection("west");
+                $this->setDirection("west");
                 break;
             default:
-                $this->setFacingdirection("east");
+                $this->setDirection("east");
                 break;
         }
     }
 
     public function changeDirectionRight()
     {
-        switch ($this->getFacingDirection()) {
+        switch ($this->getDirection()) {
             case 'west':
-                $this->setFacingdirection("north");
+                $this->setDirection("north");
                 break;
 
             case 'east':
-                $this->setFacingdirection("south");
+                $this->setDirection("south");
                 break;
             case "north":
-                $this->setFacingdirection("east");
+                $this->setDirection("east");
                 break;
             default:
-                $this->setFacingdirection("west");
+                $this->setDirection("west");
                 break;
         }
     }
 
     public function moveForward()
     {
-        switch ($this->getFacingDirection()) {
+        switch ($this->getDirection()) {
             case 'south':
-                return array($this->x_position , $this->y_position + 1);
+                return array($this->xPosition , $this->yPosition + 1);
 
             break;
 
             case 'north':
-                return array($this->x_position , $this->y_position - 1);
+                return array($this->xPosition , $this->yPosition - 1);
 
             break;
             case 'east':
-                return array($this->x_position + 1 , $this->y_position);
+                return array($this->xPosition + 1 , $this->yPosition);
 
             break;
 
             default:
-                return array($this->x_position - 1 , $this->y_position);
+                return array($this->xPosition - 1 , $this->yPosition);
             break;
         }
     }
 
     public function moveBackwards()
     {
-        switch ($this->getFacingDirection()) {
+        switch ($this->getDirection()) {
             case 'south':
-                return array($this->x_position , $this->y_position - 1);
+                return array($this->xPosition , $this->yPosition - 1);
 
             break;
 
             case 'north':
-                return array($this->x_position, $this->y_position + 1);
+                return array($this->xPosition, $this->yPosition + 1);
 
             break;
             case 'east':
-                return array($this->x_position - 1, $this->y_position);
+                return array($this->xPosition - 1, $this->yPosition);
             break;
 
             default:
-                return array($this->x_position + 1, $this->y_position);
+                return array($this->xPosition + 1, $this->yPosition);
 
             break;
         }
     }
 
-    public function getFacingDirection()
+    public function getDirection()
     {
-        return $this->faceing_direction ;
+        return $this->direction ;
     }
 
-    public function setFacingdirection($direction)
+    public function setDirection($direction)
     {
-        $this->faceing_direction = $direction ;
+        $this->direction = $direction ;
     }
 
-    public function validFacingDirection($facing_direction)
+    public function validDirection($direction)
     {
-        if (in_array(strtolower($facing_direction), $this->allowed_facing_directions)) {
+        if (in_array(strtolower($direction), $this->allowedDirections)) {
             return true;
         }
 
         throw new MoveableException("allowed facing directions for this class is " .
-                implode(",", $this->allowed_facing_directions) . " you gave : " . $facing_direction);
+                implode(",", $this->allowedDirections) . " you gave : " . $facingdirection);
         return false;
     }
 
     public function validWalkCommand($command)
     {
-        if (!in_array(strtolower($command), $this->valid_walk_commands)) {
-            throw new MoveableException("you have supplied invalid walkCommands");
+        if (!in_array(strtolower($command), $this->valid_walkCommands)) {
+            throw new InvalidWalkCommandException("you have supplied invalid walk commands");
 
             return false;
         }
@@ -323,9 +316,11 @@ class Robot implements
         return true;
     }
 
-    public function grabObject(GrabbableObjectInterface $object)
+    public function grabItem(CanBeGrabbedInterface $item)
+
     {
-        return array_push($this->inventory, $object) ;
+        $item = $this->getGrid()->passOverItem($item);
+        return array_push($this->inventory, $item) ;
     }
 
     public function inventory()

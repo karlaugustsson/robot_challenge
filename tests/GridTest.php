@@ -158,8 +158,6 @@ class GridTest extends TestCase
         $grid = new Grid(100,100);
         $robot = new Robot("North",$grid , array(50,0));
         $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
-
-
         $this->assertEquals(array(52,99),$robot->executeWalkCommand("ffrff"));
 
 
@@ -174,24 +172,24 @@ class GridTest extends TestCase
 
 
     }
-    public function testRemoveObjectFromGrid(){
+    public function testRemoveItemFromGrid(){
         $grid = new Grid(100,100);
         $flag = new Flag($grid , array(50,0));
-        $this->assertEquals(true,$grid->PassabaleObjectFoundOnPosition(array(50,0)));
-        $this->assertEquals(1,count($grid->getObjectsOnGrid()));
-        $this->assertEquals($flag,$grid->PassOverObjectFromPosition(array(50,0)));
-        $this->assertEquals(0,count($grid->getObjectsOnGrid()));
+        $this->assertEquals(true,$grid->isPassableItemFoundOnPosition(array(50,0)));
+        $this->assertEquals(1,count($grid->getItemsOnGrid()));
+        $this->assertEquals($flag,$grid->passOverItem($flag));
+        $this->assertEquals(0,count($grid->getItemsOnGrid()));
 
     }
     public function testPassoverFlagToRobot(){
         $grid = new Grid(100,100);
         $flag = new Flag($grid , array(50,0));
         $robot = new Robot("North",$grid , array(50,0));
-        $this->assertEquals(true,$grid->PassabaleObjectFoundOnPosition(array(50,0)));
-        $this->assertEquals(2,count($grid->getObjectsOnGrid()));
-        $this->assertEquals(true,$robot->grabObject($grid->PassOverObjectFromPosition(array(50,0))));
+        $this->assertEquals(true,$grid->isPassableItemFoundOnPosition(array(50,0)));
+        $this->assertEquals(2,count($grid->getItemsOnGrid()));
+        $this->assertEquals(true,$robot->grabItem($flag));
         $this->assertEquals($flag,$robot->inventory()[0]);
-        $this->assertEquals(1,count($grid->getObjectsOnGrid()));
+        $this->assertEquals(1,count($grid->getItemsOnGrid()));
 
     }
 

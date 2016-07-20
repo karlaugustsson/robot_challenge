@@ -1,7 +1,7 @@
 <?php
 namespace App\RobotChallenge\Exceptions;
 
-class MoveableException extends \Exception
+class InvalidWalkCommandException extends \Exception
 {
 
 }

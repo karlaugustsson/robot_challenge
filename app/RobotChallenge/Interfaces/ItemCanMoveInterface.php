@@ -1,12 +1,12 @@
 <?php namespace App\RobotChallenge\Interfaces ;
 
-interface MoveableObjectInterface
+interface ItemCanMoveInterface
 {
 
     public function executeWalkCommand($Walkcommands);
 
     public function validWalkCommand($Walkcommand);
-    public function validFacingDirection($faceingDirection);
+    public function validDirection($direction);
     public function setCanMove($bool = null);
     public function canMove();
 

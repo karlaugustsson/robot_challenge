@@ -1,6 +1,6 @@
 <?php namespace App\RobotChallenge\Interfaces ;
 
-interface WallObjectInterface
+interface CanBeGrabbedInterface
 {
 
 }
