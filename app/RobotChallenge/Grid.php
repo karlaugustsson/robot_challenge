@@ -1,5 +1,6 @@
 <?php namespace App\RobotChallenge;
 
+use App\RobotChallenge\GridSize ;
 use App\RobotChallenge\Exceptions\GridException ;
 use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
 use App\RobotChallenge\Exceptions\GridPathIsBlockedException  ;
@@ -15,30 +16,23 @@ use App\RobotChallenge\Interfaces\WallitemInterface ;
 
 class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, ItemsCanBePickedUpInterface
 {
-    private $height;
-    private $width;
     private $itemsOnTheGrid = array();
+    private $width = null;
+    private $height = null;
 
     public function __construct($width, $height)
     {
 
+        $this->height = abs((int)$height);
 
-        $this->height = (int)$height;
+        $this->width = abs((int)$width);
 
-        $this->width = (int)$width;
 
-        if ($this->height < 0) {
-            $this->height = abs($height);
-        }
-
-        if ($this->width < 0) {
-            $this->width = abs($width);
-        }
     }
 
     public function getGridDimensions()
     {
-        return array($this->width,$this->height);
+        return array($this->getGridWidth(),$this->getGridHeight());
     }
 
     private function getGridHeight()
@@ -81,7 +75,6 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
     public function canPlaceItemOnPosition($position, GridItemInterface $item = null)
     {
 
-        if ($this->positionarrayIsValid($position)) {
             if ($item && $item instanceof  CanBePlacedInsideWallInterface) {
                 if (!$this->gridPositionExistsIncludeWalls($position[0], $position[1])) {
                     throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
@@ -102,7 +95,6 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
             }
 
             return true;
-        }
 
         return false;
     }
@@ -156,21 +148,6 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
         return false;
 
 
-    }
-
-    private function positionarrayIsValid($position)
-    {
-
-        if (!is_array($position)) {
-            throw new GridException("argument position is expected to be an array", 1);
-            return false;
-        }
-        if ($position[0] === null || $position[1] === null) {
-            throw new GridException("position-array should have two keys for x and y position");
-            return false;
-        }
-
-        return true;
     }
 
     public function gridPositionIsBlocked($position)

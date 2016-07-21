@@ -66,8 +66,6 @@ class GridTest extends TestCase
 
     public function testAddingRobotsToGrid(){
 
-
-
     	$grid = new Grid(50,50);
 
     	$robot = new Robot("north",$grid);

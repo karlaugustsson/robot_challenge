@@ -19,8 +19,7 @@ class Robot implements
     CanGrabItemsInterface
 {
 
-    protected $xPosition = null;
-    protected $yPosition = null;
+    protected $position = null;
     protected $type;
     protected $gridInstance;
     protected $faceingDirection ;
@@ -43,6 +42,7 @@ class Robot implements
         if ($initialGridPosition !== null) {
             $this->setInitialGridPosition($initialGridPosition);
         }
+
         $this->direction = strtolower($direction) ;
 
     }
@@ -64,12 +64,12 @@ class Robot implements
 
     public function setInitialGridPosition($position)
     {
-        if ($this->xPosition !== null) {
-            throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can onky be set once");
+        if ($this->position !== null ) {
+            throw new IntialGridPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
         }
         if ($this->getGrid()->placeItemOnGrid($this, $position)) {
-            $this->xPosition = $position[0];
-            $this->yPosition = $position[1];
+
+            $this->position = new Position($position[0],$position[1]);
             return true;
         } else {
             return false;
@@ -89,24 +89,23 @@ class Robot implements
                 $warpPosition = $this->getGrid()->getWarpPointPosition($newPosition) ;
 
                 if ($warpPosition != false) {
-                    $this->xPosition = $warpPosition[0];
-                    $this->yPosition = $warpPosition[1];
+                    $this->position->setPosition($warpPosition[0],$warpPosition[1]);
+
                 } else {
-                    $this->xPosition = $newPosition[0];
-                    $this->yPosition = $newPosition[1];
+                    $this->position->setPosition($newPosition[0],$newPosition[1]);
                 }
 
                 return $newPosition;
             } else {
                 $this->stop();
                 print "robot stopped becouse it hit a wall on position ("
-                    . $this->xPosition . "," . $this->yPosition . ")\n\r" ;
+                    . $this->position->getXPosition() . "," . $this->position->getYPosition() . ")\n\r" ;
                 return $this->getGridPosition();
             }
         } catch (GridPathIsBlockedException $e) {
             $this->stop();
             print $e->getMessage();
-            print "robot stopped on position (" . $this->xPosition . "," . $this->yPosition . ") \n\r" ;
+            print "robot stopped on position (" . $this->position->getXPosition() . "," . $this->position->getYPosition() . ") \n\r" ;
             return $e->getMessage();
         }
     }
@@ -120,12 +119,12 @@ class Robot implements
     public function getGridPosition()
     {
 
-        if ($this->xPosition === null || $this->yPosition === null) {
+        if ($this->position === null || $this->position->getPosition() === false ) {
             throw new GridPositionNotSetException("No position on grid has been set");
             return false;
         }
 
-        return array($this->xPosition , $this->yPosition);
+        return $this->position->getPosition();
     }
 
     public function isBlockable()
@@ -241,21 +240,21 @@ class Robot implements
     {
         switch ($this->getDirection()) {
             case 'south':
-                return array($this->xPosition , $this->yPosition + 1);
+                return array($this->position->getXPosition() , $this->position->getYPosition() + 1);
 
             break;
 
             case 'north':
-                return array($this->xPosition , $this->yPosition - 1);
+                return array($this->position->getXPosition() , $this->position->getYPosition() - 1);
 
             break;
             case 'east':
-                return array($this->xPosition + 1 , $this->yPosition);
+                return array($this->position->getXPosition() + 1 , $this->position->getYPosition());
 
             break;
 
             default:
-                return array($this->xPosition - 1 , $this->yPosition);
+                return array($this->position->getXPosition() - 1 , $this->position->getYPosition());
             break;
         }
     }
@@ -264,20 +263,20 @@ class Robot implements
     {
         switch ($this->getDirection()) {
             case 'south':
-                return array($this->xPosition , $this->yPosition - 1);
+                return array($this->position->getXPosition() , $this->position->getYPosition() - 1);
 
             break;
 
             case 'north':
-                return array($this->xPosition, $this->yPosition + 1);
+                return array($this->position->getXPosition() , $this->position->getYPosition() + 1);
 
             break;
             case 'east':
-                return array($this->xPosition - 1, $this->yPosition);
+                return array($this->position->getXPosition()  - 1, $this->position->getYPosition());
             break;
 
             default:
-                return array($this->xPosition + 1, $this->yPosition);
+                return array($this->position->getXPosition()  + 1, $this->position->getYPosition());
 
             break;
         }

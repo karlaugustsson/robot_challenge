@@ -12,8 +12,7 @@ use App\RobotChallenge\Exceptions\IntialGridPositionCanOnlyBeSetOnceException ;
 class WarpPoint implements GridItemInterface, CanBePlacedInsideWallInterface
 {
     private $gridInstance = null;
-    private $xPosition;
-    private $yPosition;
+    private $position = null;
     private $type;
     private $warpOutput;
 
@@ -43,17 +42,14 @@ class WarpPoint implements GridItemInterface, CanBePlacedInsideWallInterface
 
     public function setInitialGridPosition($position)
     {
-
-        if ($this->xPosition !== null) {
-            throw new IntialGridStartPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
+        if ($this->position !== null ) {
+            throw new IntialGridPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
         }
-
         if ($this->getGrid()->placeItemOnGrid($this, $position)) {
-            $this->xPosition = $position[0];
-            $this->yPosition = $position[1];
+
+            $this->position = new Position($position[0],$position[1]);
             return true;
         } else {
-
             return false;
         }
 
@@ -67,13 +63,12 @@ class WarpPoint implements GridItemInterface, CanBePlacedInsideWallInterface
     public function getGridPosition()
     {
 
-        if ($this->xPosition === null || $this->yPosition == null) {
-            throw new NogridInstanceFoundException("No position on grid has been set");
+        if ($this->position === null || $this->position->getPosition() === false ) {
+            throw new GridPositionNotSetException("No position on grid has been set");
             return false;
         }
 
-        return array($this->xPosition , $this->yPosition);
-
+        return $this->position->getPosition();
     }
 
     public function isBlockable()

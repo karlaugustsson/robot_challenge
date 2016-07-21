@@ -9,8 +9,7 @@ use App\RobotChallenge\Exceptions\IntialGridPositionCanOnlyBeSetOnceException ;
 class Obstacle implements GridItemInterface
 {
 
-    protected $xPosition = null;
-    protected $yPosition = null;
+    protected $position = null;
     protected $type;
     protected $gridInstance;
 
@@ -44,14 +43,12 @@ class Obstacle implements GridItemInterface
 
     public function setInitialGridPosition($position)
     {
-
-        if ($this->xPosition !== null) {
-            throw new IntialGridPositionCanOnlyBeSetOnceException("initial positoon on the grid can only be set once");
+        if ($this->position !== null ) {
+            throw new IntialGridPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
         }
-
         if ($this->getGrid()->placeItemOnGrid($this, $position)) {
-            $this->xPosition = $position[0];
-            $this->yPosition = $position[1];
+
+            $this->position = new Position($position[0],$position[1]);
             return true;
         } else {
             return false;
@@ -66,10 +63,10 @@ class Obstacle implements GridItemInterface
 
     public function getGridPosition()
     {
-        if (!$this->xPosition) {
+        if ($this->position === null) {
             return false;
         }
-        return array($this->xPosition , $this->yPosition);
+        return $this->position->getPosition();
     }
 
     public function isBlockable()
