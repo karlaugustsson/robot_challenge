@@ -3,6 +3,6 @@
 interface ItemsCanBePickedUpInterface
 {
 
-    public function IsPassableItemFoundOnPosition($position);
+    public function isPassableItemFoundOnPosition($position);
     public function passOverItem($position);
 }

@@ -43,16 +43,12 @@ class Flag implements GridItemInterface, CanBeGrabbedInterface
 
     public function setInitialGridPosition($position)
     {
-        if ($this->position !== null ) {
+        if ($this->getPositionInstance() !== null) {
             throw new IntialGridPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
         }
-        if ($this->getGrid()->placeItemOnGrid($this, $position)) {
-
-            $this->position = new Position($position[0],$position[1]);
-            return true;
-        } else {
-            return false;
-        }
+        $this->setPositionInstance($position[0], $position[1]);
+        $this->getGrid()->placeItemOnGrid($this, $this->getCurrentPosition());
+        return true;
 
     }
 
@@ -72,5 +68,39 @@ class Flag implements GridItemInterface, CanBeGrabbedInterface
     public function isBlockable()
     {
         return false;
+    }
+    private function getPositionInstance()
+    {
+        return $this->position;
+    }
+    private function setPositionInstance($x, $y = null)
+    {
+        if (is_array($x) && $y === null) {
+             $this->position = new Position($x[0], $y[1]);
+        } else {
+            $this->position = new Position($x, $y);
+        }
+
+    }
+    private function getCurrentPosition()
+    {
+        return $this->getPositionInstance()->getPosition();
+    }
+    private function setPosition($x, $y = null)
+    {
+
+        if (is_array($x) && $y === null) {
+             $this->getPositionInstance()->setPosition($x[0], $x[1]);
+        } else {
+            $this->getPositionInstance()->setPosition($x[0], $y[1]);
+        }
+    }
+    private function getXposition()
+    {
+        return $this->getPositionInstance()->getXposition();
+    }
+    private function getYposition()
+    {
+        return $this->getPositionInstance()->getYposition();
     }
 }

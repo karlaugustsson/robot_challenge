@@ -3,5 +3,5 @@
 interface GridWarpPointInterface
 {
     public function positionHasWarpPoint($position);
-    public function getWarpPointPosition($position);
+    public function getWarpPointEndPosition($position);
 }

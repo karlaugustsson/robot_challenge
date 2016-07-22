@@ -7,6 +7,7 @@ use App\RobotChallenge\Interfaces\CanGrabItemsInterface ;
 use App\RobotChallenge\Interfaces\CanBeGrabbedInterface ;
 
 use App\RobotChallenge\Exceptions\InvalidWalkCommandException ;
+use App\RobotChallenge\Exceptions\InvalidCommandException ;
 use App\RobotChallenge\Exceptions\GridPositionOutOfBoundsException ;
 use App\RobotChallenge\Exceptions\GridPathIsBlockedException  ;
 use App\RobotChallenge\Exceptions\NoGridInstanceFoundException ;
@@ -19,14 +20,14 @@ class Robot implements
     CanGrabItemsInterface
 {
 
-    protected $position = null;
-    protected $type;
-    protected $gridInstance;
-    protected $faceingDirection ;
-    protected $allowedDirections = array( "north" , "south" , "east" , "west");
-    protected $valid_walkCommands = array("f","b","l","r") ;
-    protected $canMove ;
-    protected $inventory = array() ;
+    private $position = null;
+    private $type;
+    private $gridInstance;
+    private $faceingDirection ;
+    private $allowedDirections = array( "north" , "south" , "east" , "west");
+    private $validWalkCommands = array("f","b","l","r") ;
+    private $canMove ;
+    private $inventory = array() ;
 
     public function __construct($direction, Grid $gridInstance, $initialGridPosition = null)
     {
@@ -56,7 +57,7 @@ class Robot implements
     {
 
         if ($this->gridInstance === null) {
-            throw new NogridInstanceectFoundException("cant set position becouse no grid instance has been set");
+            throw new NogridInstanceectFoundException("no grid instance has been set");
             return false;
         }
         return $this->gridInstance;
@@ -64,16 +65,12 @@ class Robot implements
 
     public function setInitialGridPosition($position)
     {
-        if ($this->position !== null ) {
+        if ($this->getPositionInstance() !== null) {
             throw new IntialGridPositionCanOnlyBeSetOnceException("initial startValue can only be set once");
         }
-        if ($this->getGrid()->placeItemOnGrid($this, $position)) {
-
-            $this->position = new Position($position[0],$position[1]);
-            return true;
-        } else {
-            return false;
-        }
+        $this->setPositionInstance($position[0], $position[1]);
+        $this->getGrid()->placeItemOnGrid($this, $this->getCurrentPosition());
+        return true;
 
     }
 
@@ -81,33 +78,30 @@ class Robot implements
     {
         try {
             if ($this->getGrid()->canPlaceItemOnPosition($newPosition)) {
+                $this->setPosition($newPosition);
 
-                if ($this->getGrid()->IsPassableItemFoundOnPosition($newPosition)){
-                    $this->grabItem($this->getGrid()->getPassableItemOnPosition($newPosition));
+                if ($this->getGrid()->IsPassableItemFoundOnPosition($this->getCurrentPosition())) {
+                    $this->grabItem($this->getGrid()->getPassableItemOnPosition($this->getCurrentPosition()));
                 }
 
-                $warpPosition = $this->getGrid()->getWarpPointPosition($newPosition) ;
-
-                if ($warpPosition != false) {
-                    $this->position->setPosition($warpPosition[0],$warpPosition[1]);
-
-                } else {
-                    $this->position->setPosition($newPosition[0],$newPosition[1]);
+                if ($this->getGrid()->positionHasWarpPoint($this->getCurrentPosition())) {
+                    $this->setPosition($this->getGrid()->getWarpPointEndPosition($this->getCurrentPosition()));
                 }
-
-                return $newPosition;
-            } else {
-                $this->stop();
-                print "robot stopped becouse it hit a wall on position ("
-                    . $this->position->getXPosition() . "," . $this->position->getYPosition() . ")\n\r" ;
-                return $this->getGridPosition();
             }
+        } catch (GridPositionOutOfBoundsException $e) {
+            $this->stop();
+            $message = "robot stopped becouse it hit a wall, current position:%s \n\r";
+            printf($message, implode($this->getCurrentPosition(), ","));
         } catch (GridPathIsBlockedException $e) {
             $this->stop();
             print $e->getMessage();
-            print "robot stopped on position (" . $this->position->getXPosition() . "," . $this->position->getYPosition() . ") \n\r" ;
-            return $e->getMessage();
+            printf(" current position (%s)", implode($this->getCurrentPosition()));
+        } catch (\Exception $e) {
+            $this->stop();
+            print $e->getMessage();
         }
+
+
     }
 
     public function getTypeOfItem()
@@ -118,13 +112,12 @@ class Robot implements
 
     public function getGridPosition()
     {
-
-        if ($this->position === null || $this->position->getPosition() === false ) {
+        if ($this->getPositionInstance() === null || $this->getCurrentPosition() === false) {
             throw new GridPositionNotSetException("No position on grid has been set");
             return false;
         }
 
-        return $this->position->getPosition();
+        return $this->getPositionInstance()->getPosition();
     }
 
     public function isBlockable()
@@ -298,14 +291,13 @@ class Robot implements
             return true;
         }
 
-        throw new MoveableException("allowed facing directions for this class is " .
+        throw new InvalidDirectionCommandException("allowed facing directions for this class is " .
                 implode(",", $this->allowedDirections) . " you gave : " . $facingdirection);
-        return false;
     }
 
     public function validWalkCommand($command)
     {
-        if (!in_array(strtolower($command), $this->valid_walkCommands)) {
+        if (!in_array(strtolower($command), $this->validWalkCommands)) {
             throw new InvalidWalkCommandException("you have supplied invalid walk commands");
 
             return false;
@@ -316,14 +308,48 @@ class Robot implements
     }
 
     public function grabItem(CanBeGrabbedInterface $item)
-
     {
         $item = $this->getGrid()->passOverItem($item);
         return array_push($this->inventory, $item) ;
     }
 
-    public function inventory()
+    public function getInventory()
     {
         return $this->inventory;
+    }
+
+    private function getPositionInstance()
+    {
+        return $this->position;
+    }
+    private function setPositionInstance($x, $y = null)
+    {
+        if (is_array($x) && $y === null) {
+             $this->position = new Position($x[0], $y[1]);
+        } else {
+            $this->position = new Position($x, $y);
+        }
+
+    }
+    private function getCurrentPosition()
+    {
+        return $this->getPositionInstance()->getPosition();
+    }
+    private function setPosition($x, $y = null)
+    {
+
+        if (is_array($x) && $y === null) {
+             $this->getPositionInstance()->setPosition($x[0], $x[1]);
+        } else {
+            $this->getPositionInstance()->setPosition($x[0], $y[1]);
+        }
+    }
+    private function getXposition()
+    {
+        return $this->getPositionInstance()->getXposition();
+    }
+    private function getYposition()
+    {
+        return $this->getPositionInstance()->getYposition();
     }
 }

@@ -54,13 +54,24 @@ class GridTest extends TestCase
 
     	$this->assertEquals(true,$grid->GridPositionExists(20,30));
 
-    	$this->assertEquals(false,$grid->GridPositionExists(-20,-30));
-
-    	$this->assertEquals(false,$grid->GridPositionExists(51,50));
-
     	$this->assertEquals(true,$grid->GridPositionExists("cow","mau"));
 
 
+    }
+    public function testInvalidGridPositions(){
+        $grid = new Grid(50,50);
+        try {
+        $grid->GridPositionExists(-20,-30);
+        }
+        catch (Exception $e) {
+            $this->assertEquals( "position:(-20,-30) requested does not exist on this grid", $e->getMessage());
+        }
+        try {
+        $grid->GridPositionExists(50,51);
+        }
+        catch (Exception $e) {
+            $this->assertEquals( "position:(50,51) requested does not exist on this grid", $e->getMessage());
+        }
     }
 
 
@@ -74,7 +85,12 @@ class GridTest extends TestCase
 
 		//alse throws error position not found
         $robot = new Robot("north",$grid);
-		$this->assertEquals(false,$robot->setInitialGridPosition(array(-60,2)));
+        try {
+        $robot->setInitialGridPosition(array(-60,2));
+        }
+        catch (Exception $e) {
+            $this->assertEquals( "position:(-60,2) requested does not exist on this grid", $e->getMessage());
+        }
 
 
     }
@@ -166,7 +182,7 @@ class GridTest extends TestCase
         $warpPoint = new WarpPoint($grid , array(50,-1) , array(50,100));
         $obstacle = new Obstacle($grid,array(50,100));
 
-        $this->assertEquals(array(50,0),$robot->executeWalkCommand("ffrff"));
+        $this->assertEquals(array(50,-1),$robot->executeWalkCommand("ffrff"));
 
 
     }
@@ -186,7 +202,7 @@ class GridTest extends TestCase
         $this->assertEquals(true,$grid->isPassableItemFoundOnPosition(array(50,0)));
         $this->assertEquals(2,count($grid->getItemsOnGrid()));
         $this->assertEquals(true,$robot->grabItem($flag));
-        $this->assertEquals($flag,$robot->inventory()[0]);
+        $this->assertEquals($flag,$robot->getInventory()[0]);
         $this->assertEquals(1,count($grid->getItemsOnGrid()));
 
     }
@@ -198,8 +214,8 @@ class GridTest extends TestCase
         $robot = new Robot("east",$grid , array(50,0));
         $this->assertEquals(array(54,0),$robot->executeWalkCommand("ffff"));
 
-        $this->assertEquals($flag,$robot->inventory()[0]);
-        $this->assertEquals($flag2,$robot->inventory()[1]);
+        $this->assertEquals($flag,$robot->getInventory()[0]);
+        $this->assertEquals($flag2,$robot->getInventory()[1]);
 
     }
 

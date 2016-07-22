@@ -55,9 +55,8 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
             || $this->positionHasWarpPoint(array($x,$y)) == true) {
             return true;
         }
+        throw new GridPositionOutOfBoundsException("position:({$x},{$y}) requested does not exist on this grid");
 
-
-        return false;
 
     }
 
@@ -67,36 +66,27 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
         if ($x <= $this->getGridWidth() + 1 && $y <= $this->getGridHeight() + 1 && $x >= -1 && $y >= -1) {
             return true;
         }
-
-        return false;
+        throw new GridPositionOutOfBoundsException("position:({$x},{$y}) requested does not exist on this grid");
 
     }
 
     public function canPlaceItemOnPosition($position, GridItemInterface $item = null)
     {
 
-            if ($item && $item instanceof  CanBePlacedInsideWallInterface) {
-                if (!$this->gridPositionExistsIncludeWalls($position[0], $position[1])) {
-                    throw new GridPositionOutOfBoundsException("the position requested does not exist on this grid");
-                }
-            } else {
-                if (!$this->gridPositionExists($position[0], $position[1])) {
-                    return false;
-                }
-            }
+        if ($item && $item instanceof CanBePlacedInsideWallInterface) {
+            $this->gridPositionExistsIncludeWalls($position[0], $position[1]);
+        } else {
+            $this->gridPositionExists($position[0], $position[1]);
+        }
 
 
 
 
-            if ($this->gridPositionIsBlocked($position)) {
-                throw new GridPathIsBlockedException("the position (" . $position[0].",". $position[1] .
-                    ") on the grid has already been taken by an blockable item ");
-                return false;
-            }
+        if ($this->gridPositionIsBlocked($position)) {
+            return false;
+        }
 
             return true;
-
-        return false;
     }
 
     public function positionHasWarpPoint($position)
@@ -110,13 +100,13 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
         return false;
     }
 
-    public function getWarpPointPosition($position)
+    public function getWarpPointEndPosition($position)
     {
         $foundOutputPosition = null;
 
         foreach ($this->getItemsOnGrid() as $item) {
             if ($item->getGridPosition() === $position && $item instanceof WarpPoint) {
-
+                $subject = $item;
                 $foundOutputPosition = $item->getWarpEndpointPosition();
             }
         }
@@ -125,8 +115,8 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
             if (!$this->gridPositionIsBlocked($foundOutputPosition)) {
                 return $foundOutputPosition;
             }
-            throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position "
-             . $foundOutputPosition[0] . " " .$foundOutputPosition[1] . "\n\r", 1);
+            throw new GridPathIsBlockedException("warpendpoint is blocked so you cant warp to position ("
+             . implode($foundOutputPosition, ",") . ")", 1);
         }
         return false;
     }
@@ -135,7 +125,6 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
     {
 
         if ($item instanceof CanBePlacedInsideWallInterface) {
-
             if ($this->canPlaceitemOnPosition($position, $item)) {
                 return array_push($this->itemsOnTheGrid, $item);
             }
@@ -170,15 +159,14 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
     {
 
         foreach ($this->getItemsOnGrid() as $item) {
-
             if ($item instanceof CanBeGrabbedInterface && $position == $item->getGridPosition()) {
-
                 return true;
             }
         }
         return false;
     }
-    public function getPassableItemOnPosition($position){
+    public function getPassableItemOnPosition($position)
+    {
         foreach ($this->getItemsOnGrid() as $key => $item) {
             if ($item instanceof CanBeGrabbedInterface && $position = $item->getGridPosition()) {
                 return $item;
@@ -188,11 +176,11 @@ class Grid implements GridWarpPointInterface, CanPlaceItemsInWallInterface, Item
     public function passOverItem($item)
     {
 
-            if ($item instanceof CanBeGrabbedInterface && in_array($item, $this->getItemsOnGrid())) {
-                $index = array_search($item, $this->getItemsOnGrid());
-                unset($this->itemsOnTheGrid[$index]);
-                return $item;
-            }
+        if ($item instanceof CanBeGrabbedInterface && in_array($item, $this->getItemsOnGrid())) {
+            $index = array_search($item, $this->getItemsOnGrid());
+            unset($this->itemsOnTheGrid[$index]);
+            return $item;
+        }
 
         throw new passOverItemException("there was no item found , to be transfered \n\r") ;
     }
