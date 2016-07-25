@@ -1,10 +1,12 @@
 <?php namespace App\RobotChallenge\Interfaces ;
 
+use App\RobotChallenge\Grid;
+
 interface GridItemInterface
 {
 
 
-    public function setGrid($grid);
+    public function setGrid(Grid $grid);
 
     public function getGrid();
 
